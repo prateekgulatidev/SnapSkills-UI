@@ -53,7 +53,7 @@ const getNodeClasses = (type: string, completed: boolean, index: number) => {
     if (index === 0) {
         positionClass = 'justify-center';
     } else {
-        positionClass = (index + 1) % 2 === 1 ? 'justify-start ml-16' : 'justify-end mr-16';
+        positionClass = (index) % 2 === 1 ? 'justify-start ml-16' : 'justify-end mr-16';
     }
     
     const baseClasses = `relative flex items-center w-full my-4 ${positionClass}`;
@@ -76,26 +76,35 @@ export default function LearnPage() {
   const [courses, setCourses] = React.useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = React.useState<Course | null>(null);
   const [completedLessons, setCompletedLessons] = React.useState<string[]>([]);
-
+  
   React.useEffect(() => {
     async function loadCourses() {
       const allCourses = await getCourses();
       setCourses(allCourses);
       if (allCourses.length > 0) {
-        setSelectedCourse(allCourses[0]);
+        const lastCourseId = localStorage.getItem('selectedCourseId') || allCourses[0].courseId;
+        const currentCourse = allCourses.find(c => c.courseId === lastCourseId) || allCourses[0];
+        setSelectedCourse(currentCourse);
       }
     }
     loadCourses();
+
+    const storedProgress = localStorage.getItem('completedLessons');
+    if (storedProgress) {
+        setCompletedLessons(JSON.parse(storedProgress));
+    }
   }, []);
+
+  React.useEffect(() => {
+    if (selectedCourse) {
+        localStorage.setItem('selectedCourseId', selectedCourse.courseId);
+    }
+  }, [selectedCourse]);
 
   const allLessons = selectedCourse?.sections.flatMap(s => s.lessons) ?? [];
 
-  const handleCompleteLesson = (lessonId: string) => {
-    if (!completedLessons.includes(lessonId)) {
-      setTimeout(() => {
-        setCompletedLessons(prev => [...prev, lessonId]);
-      }, 300);
-    }
+  const handleCourseSelect = (course: Course) => {
+    setSelectedCourse(course);
   }
 
   if (!selectedCourse) {
@@ -134,7 +143,7 @@ export default function LearnPage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[calc(100vw-2rem)] md:w-[calc(512px-2rem)]">
                 {courses.map(course => (
-                    <DropdownMenuItem key={course.courseId} onSelect={() => setSelectedCourse(course)}>
+                    <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
                         {course.title}
                     </DropdownMenuItem>
                 ))}
@@ -164,7 +173,7 @@ export default function LearnPage() {
                 const { wrapper, node, label } = getNodeClasses(lesson.type, isCompleted, index + 1);
 
                 const content = (
-                     <div className={wrapper} onClick={() => isUnlocked && handleCompleteLesson(lesson.lessonId)}>
+                     <div className={wrapper}>
                         <div className={node}>
                             {getNodeIcon(lesson, isUnlocked)}
                         </div>

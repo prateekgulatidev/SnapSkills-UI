@@ -47,11 +47,20 @@ export default function LessonPage() {
     setCurrent(api.selectedScrollSnap() + 1);
     api.on('select', () => setCurrent(api.selectedScrollSnap() + 1));
   }, [api, lesson]);
+  
+  const completeLesson = () => {
+    const storedProgress = localStorage.getItem('completedLessons');
+    const completedLessons = storedProgress ? JSON.parse(storedProgress) : [];
+    if (!completedLessons.includes(lessonId)) {
+        const newProgress = [...completedLessons, lessonId];
+        localStorage.setItem('completedLessons', JSON.stringify(newProgress));
+    }
+    router.push('/learn');
+  }
 
   const handleNext = () => {
     if (current === total) {
-      // In a real app, we'd mark the lesson as complete here.
-      router.push('/learn');
+      completeLesson();
     } else {
       api?.scrollNext();
     }
