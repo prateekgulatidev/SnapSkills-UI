@@ -132,7 +132,7 @@ export default function LearnPage() {
     let variant: 'primary' | 'accent' | 'muted' = 'primary';
     if (!isUnlocked) {
       variant = 'muted';
-    } else if (lesson.type === 'quiz' || lesson.type === 'chest' || lesson.type === 'start') {
+    } else if (lesson.type === 'quiz' || lesson.type === 'chest' || lesson.type === 'trophy') {
       variant = 'accent';
     }
 
@@ -208,7 +208,7 @@ export default function LearnPage() {
                     <ChevronDown className="h-6 w-6"/>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[calc(100vw-2rem)] md:w-[calc(512px-2rem)]">
+            <DropdownMenuContent className="w-[calc(100vw-2rem)]">
                 {courses.map(course => (
                     <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
                         {course.title}
@@ -219,35 +219,37 @@ export default function LearnPage() {
       </header>
 
       <main className="flex-grow overflow-y-auto p-4 md:p-8">
-        <div className="hidden md:flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold">{selectedCourse.title}</h1>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-auto justify-between h-12">
-                        <div className="text-left">
-                            <p className="text-base font-bold">Switch Course</p>
-                        </div>
-                        <ChevronDown className="h-5 w-5 ml-2"/>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    {courses.map(course => (
-                        <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
-                            {course.title}
-                        </DropdownMenuItem>
-                    ))}
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
-        <div className="relative flex flex-col items-center">
-            {selectedCourse.sections.map((section, sectionIndex) => (
-                <React.Fragment key={section.sectionId}>
-                    {renderSectionHeader(section.title)}
-                    {section.lessons.map((lesson, lessonIndex) => (
-                        renderNode(lesson, sectionIndex, lessonIndex)
-                    ))}
-                </React.Fragment>
-            ))}
+        <div className="max-w-2xl mx-auto w-full">
+            <div className="hidden md:flex items-center justify-between mb-8">
+                <h1 className="text-3xl font-bold">{selectedCourse.title}</h1>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="w-auto justify-between h-12">
+                            <div className="text-left">
+                                <p className="text-base font-bold">Switch Course</p>
+                            </div>
+                            <ChevronDown className="h-5 w-5 ml-2"/>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        {courses.map(course => (
+                            <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
+                                {course.title}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+            <div className="relative flex flex-col items-center">
+                {selectedCourse.sections.map((section, sectionIndex) => (
+                    <React.Fragment key={section.sectionId}>
+                        {renderSectionHeader(section.title)}
+                        {section.lessons.map((lesson, lessonIndex) => (
+                            renderNode(lesson, sectionIndex, lessonIndex)
+                        ))}
+                    </React.Fragment>
+                ))}
+            </div>
         </div>
       </main>
     </div>
