@@ -59,7 +59,13 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
     const pathname = usePathname();
-    const pageTitle = adminNavItems.find(item => item.href === pathname)?.label || 'Dashboard';
+    const pageTitle = adminNavItems.find(item => pathname.startsWith(item.href))?.label || 'Dashboard';
+
+    // Render children directly for the login page, without the main layout
+    if (pathname === '/admin') {
+        return <>{children}</>;
+    }
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
