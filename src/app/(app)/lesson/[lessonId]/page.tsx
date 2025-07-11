@@ -1,19 +1,20 @@
 'use client';
 
 import * as React from 'react';
-import { notFound, useParams, useSearchParams } from 'next/navigation';
+import { notFound, useParams, useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { X, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel';
 import { getLesson, Lesson, Course, LessonContent } from '@/lib/courses';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LessonPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const lessonId = params.lessonId as string;
   const courseId = searchParams.get('courseId');
 
@@ -47,6 +48,15 @@ export default function LessonPage() {
     api.on('select', () => setCurrent(api.selectedScrollSnap() + 1));
   }, [api, lesson]);
 
+  const handleNext = () => {
+    if (current === total) {
+      // In a real app, we'd mark the lesson as complete here.
+      router.push('/learn');
+    } else {
+      api?.scrollNext();
+    }
+  };
+
   if (lesson === undefined) {
     return (
        <div className="flex flex-col h-screen bg-muted dark:bg-black">
@@ -72,19 +82,13 @@ export default function LessonPage() {
   if (lesson === null) {
     return notFound();
   }
-
-  const handleQuizSubmit = (slideIndex: number, selectedOptionIndex: number, correct: boolean) => {
-    setQuizState((prev) => ({
-      ...prev,
-      [slideIndex]: { answered: true, selected: selectedOptionIndex, correct },
-    }));
-  };
   
   const progress = total > 0 ? (current / total) * 100 : 0;
+  const isLastSlide = current === total;
 
   return (
     <div className="flex flex-col h-screen bg-muted dark:bg-black">
-      <header className="p-2 space-y-2 border-b bg-background">
+      <header className="p-2 space-y-2 border-b bg-background sticky top-0 z-10">
         <div className="flex items-center justify-between px-2">
           <Link href={`/learn`}>
             <Button variant="ghost" size="icon">
@@ -108,7 +112,7 @@ export default function LessonPage() {
              };
 
             return (
-              <CarouselItem key={index} className="pt-1">
+              <CarouselItem key={index} className="pt-1 basis-full">
                 <div className="p-4 h-full">
                   <Card className="h-full flex flex-col justify-center items-center text-center p-6 shadow-none border-0 bg-background">
                     <CardContent className="w-full flex flex-col items-center">
@@ -159,11 +163,13 @@ export default function LessonPage() {
             );
           })}
         </CarouselContent>
-        <div className="absolute bottom-6 right-6 flex flex-col gap-2 items-center">
-            <CarouselPrevious />
-            <CarouselNext />
-        </div>
       </Carousel>
+      
+      <footer className="p-4 border-t bg-background sticky bottom-0 z-10">
+        <Button onClick={handleNext} className="w-full h-12 text-base">
+          {isLastSlide ? 'Complete Lesson' : 'Continue'}
+        </Button>
+      </footer>
     </div>
   );
 }
