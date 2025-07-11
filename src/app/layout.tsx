@@ -22,7 +22,7 @@ export default function RootLayout({
       </head>
       <body className={cn("font-body antialiased")}>
         <div className="bg-gray-100 dark:bg-black">
-          <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col border-x border-gray-200 bg-background shadow-2xl dark:border-gray-800">
+          <main className="relative mx-auto flex min-h-screen w-full max-w-5xl flex-col border-x border-gray-200 bg-background shadow-2xl dark:border-gray-800">
               {children}
           </main>
         </div>
