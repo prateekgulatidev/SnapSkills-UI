@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
   Bell,
   BookOpen,
@@ -13,6 +14,7 @@ import {
   BarChart,
   Shield,
   Menu,
+  LogOut,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -35,12 +37,13 @@ const adminNavItems = [
     { href: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 
-function AdminNavLink({ href, icon: Icon, label }: { href: string, icon: React.ElementType, label: string }) {
+function AdminNavLink({ href, icon: Icon, label, onClick }: { href: string, icon: React.ElementType, label: string, onClick?: () => void }) {
     const pathname = usePathname();
     const isActive = pathname.startsWith(href);
     return (
         <Link
             href={href}
+            onClick={onClick}
             className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
                 isActive && "bg-muted text-primary"
@@ -52,11 +55,11 @@ function AdminNavLink({ href, icon: Icon, label }: { href: string, icon: React.E
     )
 }
 
-function AdminNav() {
+function AdminNav({ onLinkClick }: { onLinkClick?: () => void }) {
     return (
         <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             {adminNavItems.map(item => (
-                <AdminNavLink key={item.href} {...item} />
+                <AdminNavLink key={item.href} {...item} onClick={onLinkClick} />
             ))}
         </nav>
     );
@@ -69,10 +72,15 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
     const pageTitle = adminNavItems.find(item => pathname.startsWith(item.href))?.label || 'Dashboard';
 
     if (pathname === '/admin') {
         return <>{children}</>;
+    }
+
+    const handleLinkClick = () => {
+        setIsSheetOpen(false);
     }
 
   return (
@@ -107,7 +115,7 @@ export default function AdminLayout({
       </div>
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-           <Sheet>
+           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="outline"
@@ -123,7 +131,7 @@ export default function AdminLayout({
                 <Shield className="h-6 w-6 text-primary" />
                 <span>SnapSkills Admin</span>
               </Link>
-              <AdminNav />
+              <AdminNav onLinkClick={handleLinkClick} />
                <div className="mt-auto">
                 <Card>
                   <CardHeader>
@@ -144,9 +152,12 @@ export default function AdminLayout({
           <div className="w-full flex-1 text-center md:text-left">
             <h1 className="text-lg font-semibold md:text-2xl">{pageTitle}</h1>
           </div>
-          <Link href="/learn">
-              <Button>Back to App</Button>
-          </Link>
+          <Button variant="outline" asChild>
+            <Link href="/">
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Link>
+          </Button>
         </header>
         {children}
       </div>
