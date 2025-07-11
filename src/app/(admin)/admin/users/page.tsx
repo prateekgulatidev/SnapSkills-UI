@@ -1,4 +1,7 @@
 
+'use client';
+
+import * as React from 'react';
 import { getUsers, User } from "@/lib/users";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, ListFilter } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,19 +20,64 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 
-export default async function AdminUsersPage() {
-  const users = await getUsers();
+export default function AdminUsersPage() {
+  const [users, setUsers] = React.useState<User[]>([]);
+  const [allUsers, setAllUsers] = React.useState<User[]>([]);
+  const [roleFilter, setRoleFilter] = React.useState<string>("All");
+
+  React.useEffect(() => {
+    const fetchUsers = async () => {
+      const fetchedUsers = await getUsers();
+      setAllUsers(fetchedUsers);
+      setUsers(fetchedUsers);
+    };
+    fetchUsers();
+  }, []);
+
+  React.useEffect(() => {
+    if (roleFilter === "All") {
+      setUsers(allUsers);
+    } else {
+      setUsers(allUsers.filter(user => user.role === roleFilter));
+    }
+  }, [roleFilter, allUsers]);
+
+  const roles = ["All", "Admin", "User"];
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex items-center">
             <h1 className="text-lg font-semibold md:text-2xl">Users</h1>
-            <div className="ml-auto">
+            <div className="ml-auto flex items-center gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-8 gap-1">
+                      <ListFilter className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                        Filter by Role
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Filter by role</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {roles.map(role => (
+                      <DropdownMenuCheckboxItem
+                        key={role}
+                        checked={roleFilter === role}
+                        onSelect={() => setRoleFilter(role)}
+                      >
+                        {role}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Button>Add User</Button>
             </div>
         </div>
