@@ -116,6 +116,77 @@ const coursesData: Course[] = [
             ]
           },
           {
+            "lessonId": "lesson_setup_env",
+            "icon": "Terminal",
+            "type": "lesson",
+            "title": "Setup Environment",
+            "content": [
+              {
+                "id": 14,
+                "type": "text",
+                "content": "To start coding in Java, you need to set up a development environment. This involves installing the Java Development Kit (JDK)."
+              },
+              {
+                "id": 15,
+                "type": "text",
+                "content": "You will also need an Integrated Development Environment (IDE) like IntelliJ IDEA, Eclipse, or VS Code. We recommend VS Code with the 'Extension Pack for Java'."
+              },
+              {
+                "id": 16,
+                "type": "quiz",
+                "question": "What does JDK stand for?",
+                "options": [
+                  "Java Development Kit",
+                  "Java Design Kit",
+                  "JavaScript Development Kit",
+                  "Java Deployment Kit"
+                ],
+                "answerIndex": 0,
+                "explanation": "JDK stands for Java Development Kit, which contains the tools needed to develop and run Java applications."
+              }
+            ]
+          },
+          {
+            "lessonId": "lesson_jdk_details",
+            "icon": "Binary",
+            "type": "lesson",
+            "title": "JDK Components",
+            "content": [
+              {
+                "id": 17,
+                "type": "text",
+                "content": "The JDK has two main components: the Java Compiler (`javac`) and the Java Virtual Machine (JVM)."
+              },
+              {
+                "id": 18,
+                "type": "code",
+                "language": "bash",
+                "text": "The compiler turns your `.java` files into `.class` files (bytecode). You use it like this:",
+                "code": "javac HelloWorld.java"
+              },
+              {
+                "id": 19,
+                "type": "code",
+                "language": "bash",
+                "text": "The JVM then runs the bytecode. You use it like this:",
+                "code": "java HelloWorld"
+              },
+              {
+                "id": 20,
+                "type": "quiz",
+                "question": "Which tool compiles a `.java` file into bytecode?",
+                "options": [
+                  "java",
+                  "jvm",
+                  "jdk",
+                  "javac"
+                ],
+                "answerIndex": 3,
+                "explanation": "`javac` is the Java compiler that transforms your source code into bytecode that the JVM can execute."
+              }
+            ]
+          },
+          {
             "lessonId": "lesson3",
             "icon": "Puzzle",
             "type": "quiz",
