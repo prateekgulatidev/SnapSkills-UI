@@ -32,7 +32,7 @@ import { cn } from "@/lib/utils";
 
 const adminNavItems = [
     { href: '/admin/dashboard', icon: Home, label: 'Dashboard' },
-    { href: '/admin/courses', icon: BookOpen, label: 'Courses' },
+    { href: '/admin/course-management', icon: BookOpen, label: 'Courses' },
     { href: '/admin/users', icon: Users, label: 'Users' },
     { href: '/admin/analytics', icon: BarChart, label: 'Analytics' },
     { href: '/admin/content-tools', icon: Upload, label: 'Content Tools' },
@@ -75,11 +75,12 @@ export default function AdminLayout({
 }) {
     const pathname = usePathname();
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-    const pageTitle = adminNavItems.find(item => pathname.startsWith(item.href))?.label || 'Dashboard';
-
+    
     if (pathname === '/admin') {
-        return <>{children}</>;
+      return <>{children}</>;
     }
+
+    const pageTitle = adminNavItems.find(item => pathname.startsWith(item.href))?.label || 'Dashboard';
 
     const handleLinkClick = () => {
         setIsSheetOpen(false);
