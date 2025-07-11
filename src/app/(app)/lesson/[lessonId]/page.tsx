@@ -114,8 +114,9 @@ export default function LessonPage() {
           {lesson.content && lesson.content.map((contentItem, index) => {
              const quizInfo = quizState[index] || { answered: false, selected: null };
             
-             const handleLocalQuizSubmit = (selectedIdx: number, isCorrect: boolean) => {
+             const handleLocalQuizSubmit = (selectedIdx: number) => {
                  if (contentItem.type === 'quiz') {
+                     const isCorrect = selectedIdx === contentItem.answerIndex;
                      setQuizState(prev => ({ ...prev, [index]: { answered: true, selected: selectedIdx, correct: isCorrect } }));
                  }
              };
@@ -141,26 +142,31 @@ export default function LessonPage() {
                       {contentItem.type === 'quiz' && (
                         <div className="space-y-3 text-left w-full max-w-md">
                           <p className="font-semibold mb-4 text-xl">{contentItem.question}</p>
-                          {contentItem.options.map((option, optionIndex) => (
-                            <Button
-                              key={option}
-                              variant="outline"
-                              className={`w-full h-auto py-3 justify-start text-base ${quizInfo.answered && quizInfo.selected === optionIndex ? (optionIndex === contentItem.answerIndex ? 'border-green-500 bg-green-500/10' : 'border-red-500 bg-red-500/10') : ''}`}
-                              onClick={() => handleLocalQuizSubmit(optionIndex, optionIndex === contentItem.answerIndex)}
-                              disabled={quizInfo.answered}
-                            >
-                              {option}
-                              {quizInfo.answered && quizInfo.selected === optionIndex && (
-                                optionIndex === contentItem.answerIndex ? <Check className="ml-auto text-green-500" /> : <X className="ml-auto text-red-500" />
-                              )}
-                            </Button>
-                          ))}
+                          {contentItem.options.map((option, optionIndex) => {
+                            const isCorrect = optionIndex === contentItem.answerIndex;
+                            const isSelected = quizInfo.selected === optionIndex;
+
+                            return (
+                                <Button
+                                  key={option}
+                                  variant="outline"
+                                  className={`w-full h-auto py-3 justify-start text-base ${quizInfo.answered && isSelected ? (isCorrect ? 'border-green-500 bg-green-500/10' : 'border-red-500 bg-red-500/10') : ''}`}
+                                  onClick={() => handleLocalQuizSubmit(optionIndex)}
+                                  disabled={quizInfo.answered}
+                                >
+                                  {option}
+                                  {quizInfo.answered && isSelected && (
+                                    isCorrect ? <Check className="ml-auto text-green-500" /> : <X className="ml-auto text-red-500" />
+                                  )}
+                                </Button>
+                            )
+                           })}
                         </div>
                       )}
 
                       {quizInfo.answered && contentItem.type === 'quiz' && (
-                        <div className={`w-full max-w-md mt-4 p-3 rounded-md text-sm text-left ${quizInfo.selected === contentItem.answerIndex ? 'bg-green-500/10 text-green-700' : 'bg-red-500/10 text-red-700'}`}>
-                          <p className='font-bold'>{quizInfo.selected === contentItem.answerIndex ? 'Correct!' : 'Not quite.'}</p>
+                        <div className={`w-full max-w-md mt-4 p-3 rounded-md text-sm text-left ${quizInfo.correct ? 'bg-green-500/10 text-green-700' : 'bg-red-500/10 text-red-700'}`}>
+                          <p className='font-bold'>{quizInfo.correct ? 'Correct!' : 'Not quite.'}</p>
                           {contentItem.explanation}
                         </div>
                       )}
