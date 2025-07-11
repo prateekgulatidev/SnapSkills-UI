@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { courses } from "@/lib/courses";
 import { List } from "lucide-react";
 import Link from "next/link";
-
-const course = {
-  id: '3',
-  title: 'Unit 1',
-  description: 'Python for Data Science',
-};
+import { notFound } from "next/navigation";
 
 export default function CoursePathPage({ params }: { params: { courseId: string } }) {
+  const course = courses.find(c => c.courseId === params.courseId);
+
+  if (!course) {
+    notFound();
+  }
   
   return (
     <div className="flex flex-col h-full">
@@ -25,7 +26,7 @@ export default function CoursePathPage({ params }: { params: { courseId: string 
       </header>
 
       <main className="flex-grow overflow-y-auto p-4 md:p-8">
-        <p className="text-center text-muted-foreground">Select a lesson to begin.</p>
+        <p className="text-center text-muted-foreground">This is the course overview page. The main learning happens on the 'Learn' tab!</p>
       </main>
     </div>
   )
