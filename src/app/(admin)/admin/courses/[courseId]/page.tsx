@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
 import {
   ChevronLeft,
   Users,
@@ -32,6 +33,7 @@ import {
   Save,
   PlusCircle,
   GripVertical,
+  BookMarked,
 } from 'lucide-react';
 
 export default function AdminCourseDetailPage() {
@@ -165,8 +167,10 @@ export default function AdminCourseDetailPage() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Progress value={user.progress} className="w-48 h-2" />
-                            <span className="text-sm text-muted-foreground ml-2">{user.progress}%</span>
+                            <div className="flex items-center gap-2">
+                                <Progress value={user.progress} className="w-32 h-2" />
+                                <span className="text-sm text-muted-foreground">{user.progress}%</span>
+                            </div>
                           </TableCell>
                           <TableCell className="text-right">
                               <Button variant="outline" size="sm">View</Button>
@@ -252,6 +256,23 @@ export default function AdminCourseDetailPage() {
                 <Switch id="beta-switch" />
                 <Label htmlFor="beta-switch">Mark as Beta</Label>
               </div>
+            </CardContent>
+          </Card>
+           <Card>
+            <CardHeader>
+                <div className="flex items-center gap-3">
+                    <BookMarked className="h-5 w-5" />
+                    <CardTitle>Content Versioning</CardTitle>
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="content-version">Current Version</Label>
+                    <div className="flex items-center gap-2">
+                        <Input id="content-version" defaultValue="v1.2.0" />
+                        <Button size="sm">Save</Button>
+                    </div>
+                </div>
             </CardContent>
           </Card>
            <Card>

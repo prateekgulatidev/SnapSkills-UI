@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { BookMarked, ToggleLeft, Server } from 'lucide-react';
+import { ToggleLeft, Server } from 'lucide-react';
 
 export default function AdminSettingsPage() {
     const [isQuizzesEnabled, setIsQuizzesEnabled] = React.useState(true);
@@ -17,28 +17,6 @@ export default function AdminSettingsPage() {
     return (
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
             <div className="grid gap-6">
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-3">
-                            <BookMarked className="h-6 w-6" />
-                            <CardTitle>Content Versioning</CardTitle>
-                        </div>
-                        <CardDescription>Control which version of the content is served to users.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="content-version">Current Version</Label>
-                            <div className="flex items-center gap-4">
-                                <Input id="content-version" defaultValue="v1.2.0" className="max-w-xs" />
-                                <Button>Save Version</Button>
-                            </div>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            Changing this may require users to restart their current lessons.
-                        </p>
-                    </CardContent>
-                </Card>
-
                 <Card>
                     <CardHeader>
                         <div className="flex items-center gap-3">
