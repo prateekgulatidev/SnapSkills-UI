@@ -13,17 +13,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react";
-import { courses as allCourses, Course } from '@/lib/courses';
+import { courses as allCourses, Course, Lesson } from '@/lib/courses';
 
-const getNodeIcon = (type: string, completed: boolean) => {
-    const isUnlocked = type === 'start' || completed;
+const getNodeIcon = (lesson: Lesson, completed: boolean) => {
+    const isUnlocked = lesson.type === 'start' || completed;
     const commonClasses = "w-10 h-10";
 
-    if (!isUnlocked && type !== 'start') {
+    if (!isUnlocked) {
         return <Lock className={`${commonClasses} text-muted-foreground/30`} />;
     }
 
-    switch (type) {
+    if (lesson.icon) {
+        return <span className="text-4xl">{lesson.icon}</span>;
+    }
+
+    switch (lesson.type) {
         case 'start':
             return <Star className={`${commonClasses} text-white fill-white`} />;
         case 'lesson':
@@ -49,7 +53,7 @@ const getNodeClasses = (type: string, completed: boolean, index: number) => {
     if (index === 0) {
         positionClass = 'justify-center';
     } else {
-        positionClass = index % 2 === 1 ? 'justify-start ml-16' : 'justify-end mr-16';
+        positionClass = (index + 1) % 2 === 1 ? 'justify-start ml-16' : 'justify-end mr-16';
     }
     
     const baseClasses = `relative flex items-center w-full my-4 ${positionClass}`;
@@ -58,7 +62,7 @@ const getNodeClasses = (type: string, completed: boolean, index: number) => {
     if (type === 'start') colorClass = 'bg-primary shadow-lg shadow-primary/50';
     if (completed) colorClass = 'bg-primary';
 
-    const animationClass = isUnlocked ? 'animate-in zoom-in-50' : '';
+    const animationClass = isUnlocked ? 'animate-in zoom-in-75' : '';
 
     return {
         wrapper: baseClasses,
@@ -73,6 +77,14 @@ export default function LearnPage() {
   const [completedLessons, setCompletedLessons] = React.useState<string[]>([]);
 
   const allLessons = selectedCourse.sections.flatMap(s => s.lessons);
+
+  const handleCompleteLesson = (lessonId: string) => {
+    if (!completedLessons.includes(lessonId)) {
+      setTimeout(() => {
+        setCompletedLessons(prev => [...prev, lessonId]);
+      }, 300);
+    }
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -118,23 +130,23 @@ export default function LearnPage() {
             <div className="mb-8">
                 <div className={getNodeClasses('start', true, 0).wrapper}>
                     <div className={getNodeClasses('start', true, 0).node}>
-                        {getNodeIcon('start', true)}
+                        {getNodeIcon({ type: 'start', title: selectedCourse.sections[0].title, lessonId: 'start' }, true)}
                     </div>
                     <span className={getNodeClasses('start', true, 0).label}>{selectedCourse.sections[0].title}</span>
                 </div>
             </div>
 
             {allLessons.map((lesson, index) => {
-                // For this demo, let's say the first lesson is completed
-                const isCompleted = completedLessons.includes(lesson.lessonId) || index < 1;
-                const isUnlocked = isCompleted || completedLessons.includes(allLessons[index-1]?.lessonId) || index < 1;
+                const isCompleted = completedLessons.includes(lesson.lessonId);
+                const isPreviousCompleted = index === 0 || completedLessons.includes(allLessons[index-1]?.lessonId);
+                const isUnlocked = isCompleted || isPreviousCompleted;
 
                 const { wrapper, node, label } = getNodeClasses(lesson.type, isCompleted, index + 1);
 
                 const content = (
-                     <div className={wrapper}>
+                     <div className={wrapper} onClick={() => isUnlocked && handleCompleteLesson(lesson.lessonId)}>
                         <div className={node}>
-                            {getNodeIcon(lesson.type, isCompleted)}
+                            {getNodeIcon(lesson, isUnlocked)}
                         </div>
                         <span className={label}>{lesson.title}</span>
                     </div>
@@ -148,7 +160,7 @@ export default function LearnPage() {
                    )
                 }
 
-                return <div key={lesson.lessonId} className="w-full">{content}</div>
+                return <div key={lesson.lessonId} className="w-full opacity-50 cursor-not-allowed">{content}</div>
             })}
         </div>
       </main>
