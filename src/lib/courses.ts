@@ -166,7 +166,7 @@ const coursesData: Course[] = [
         "title": "Operators and Expressions",
         "lessons": [
           { "lessonId": "lesson6", "icon": "➕", "type": "lesson", "title": "Arithmetic and Logical Operators", "content": [{ "type": "text", "content": "Java provides various operators like +, -, *, /, %, ==, !=, >, <, &&, || for building expressions."}] },
-          { "lessonId": "lesson7", "icon": "🔢", "type": "code", "title": "Using Operators in Java", "content": [{ "type": "code", "language": "java", "code": "int a = 5, b = 10;\nSystem.out.println(a + b); // 15" }] }
+          { "lessonId": "lesson7", "icon": "🔢", "type": "code", "title": "Using Operators in Java", "content": [{"type": "code", "language": "java", "code": "int a = 5, b = 10;\nSystem.out.println(a + b); // 15"}] }
         ]
       },
       {
