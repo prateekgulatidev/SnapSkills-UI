@@ -34,6 +34,7 @@ import {
   PlusCircle,
   GripVertical,
   BookMarked,
+  Settings,
 } from 'lucide-react';
 
 export default function AdminCourseDetailPage() {
@@ -250,56 +251,47 @@ export default function AdminCourseDetailPage() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Status</CardTitle>
+              <div className="flex items-center gap-3">
+                    <Settings className="h-5 w-5" />
+                    <CardTitle>Course Settings</CardTitle>
+                </div>
             </CardHeader>
-            <CardContent className="grid gap-4">
-               <div className="flex items-center space-x-2">
-                <Switch id="publish-switch" defaultChecked={true} />
-                <Label htmlFor="publish-switch" className="flex items-center gap-2">
-                    <Eye className="h-4 w-4" /> Published
-                </Label>
+            <CardContent className="grid gap-6">
+               <div className="grid gap-3">
+                  <Label>Status</Label>
+                  <div className="flex items-center space-x-2">
+                    <Switch id="publish-switch" defaultChecked={true} />
+                    <Label htmlFor="publish-switch" className="flex items-center gap-2 text-sm font-normal">
+                        <Eye className="h-4 w-4" /> Published
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Switch id="beta-switch" />
+                    <Label htmlFor="beta-switch" className="text-sm font-normal">Mark as Beta</Label>
+                  </div>
+               </div>
+               <div className="grid gap-3">
+                  <Label htmlFor="content-version">Content Version</Label>
+                  <Input id="content-version" defaultValue="v1.2.0" />
               </div>
-               <div className="flex items-center space-x-2">
-                <Switch id="beta-switch" />
-                <Label htmlFor="beta-switch">Mark as Beta</Label>
+              <div className="grid gap-3">
+                  <Label htmlFor="slug">URL Slug</Label>
+                  <Input id="slug" defaultValue={`/courses/${course.courseId.replace('course_', '')}`} />
               </div>
-            </CardContent>
-          </Card>
-           <Card>
-            <CardHeader>
-                <div className="flex items-center gap-3">
-                    <BookMarked className="h-5 w-5" />
-                    <CardTitle>Content Versioning</CardTitle>
-                </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="space-y-2">
-                    <Label htmlFor="content-version">Current Version</Label>
-                    <div className="flex items-center gap-2">
-                        <Input id="content-version" defaultValue="v1.2.0" />
-                        <Button size="sm">Save</Button>
-                    </div>
-                </div>
-            </CardContent>
-          </Card>
-           <Card>
-            <CardHeader>
-              <CardTitle>SEO & Visibility</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-                <div className="grid gap-2">
-                    <Label htmlFor="slug">URL Slug</Label>
-                    <Input id="slug" defaultValue={`/courses/${course.courseId.replace('course_', '')}`} />
-                </div>
-                 <div className="grid gap-2">
-                    <Label htmlFor="seo-title">SEO Title</Label>
-                    <Input id="seo-title" defaultValue={course.title} />
-                </div>
+              <div className="grid gap-3">
+                  <Label htmlFor="seo-title">SEO Title</Label>
+                  <Input id="seo-title" defaultValue={course.title} />
+              </div>
             </CardContent>
           </Card>
         </div>
       </div>
+      <div className="flex items-center justify-center gap-2 md:hidden">
+          <Button variant="outline" size="sm">
+            Discard
+          </Button>
+          <Button size="sm">Save Course</Button>
+      </div>
     </main>
   );
 }
-
