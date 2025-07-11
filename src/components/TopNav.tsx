@@ -1,14 +1,16 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpenCheck, Flame, Zap, Menu, BookOpen, Compass, Trophy, FileQuestion, User } from 'lucide-react';
+import { BookOpenCheck, Flame, Zap, Menu, BookOpen, Compass, Trophy, FileQuestion, User, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import { Button } from './ui/button';
 
@@ -70,6 +72,13 @@ export function TopNav() {
                   <DropdownMenuItem>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <Link href="/admin/dashboard">
+                  <DropdownMenuItem>
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>Admin Panel</span>
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuContent>
