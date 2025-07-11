@@ -51,7 +51,7 @@ const getNodeClasses = (index: number) => {
     if (index === 0) {
         positionClass = 'justify-center';
     } else {
-        positionClass = (index) % 2 === 1 ? 'justify-start ml-16' : 'justify-end mr-16';
+        positionClass = (index) % 2 === 1 ? 'justify-start pl-16' : 'justify-end pr-16';
     }
     
     return `relative flex items-center w-full my-4 ${positionClass}`;
