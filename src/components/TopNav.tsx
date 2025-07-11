@@ -16,7 +16,7 @@ const navItems = [
   { href: '/learn', icon: BookOpen, label: 'Learn' },
   { href: '/explore', icon: Compass, label: 'Explore' },
   { href: '/leaderboard', icon: Trophy, label: 'Rank' },
-  { href: '/quiz', icon: FileQuestion, label: 'Quiz' },
+  { href: '/quizzes', icon: FileQuestion, label: 'Quiz' },
 ];
 
 export function TopNav() {
