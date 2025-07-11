@@ -9,24 +9,25 @@ import { cn } from '@/lib/utils';
 const threeDButtonVariants = cva(
   `inline-flex items-center justify-center font-bold text-white
    transition-all duration-150 ease-in-out
-   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background dark:focus:ring-offset-gray-900`,
+   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background dark:focus:ring-offset-gray-900
+   drop-shadow-lg`,
   {
     variants: {
       variant: {
         primary: `
-          bg-primary border-primary/70
-          hover:bg-primary/90 hover:border-primary/60
+          bg-gradient-to-b from-primary to-green-400 border-primary/70
+          hover:from-primary/90 hover:to-green-400/90 hover:border-primary/60
           dark:focus:ring-primary`,
         accent: `
-          bg-accent border-accent/70
-          hover:bg-accent/90 hover:border-accent/60
+          bg-gradient-to-b from-accent to-purple-500 border-accent/70
+          hover:from-accent/90 hover:to-purple-500/90 hover:border-accent/60
           dark:focus:ring-accent`,
         muted: `
-          bg-muted border-muted-foreground/20 text-muted-foreground
+          bg-gradient-to-b from-slate-400 to-slate-500 border-slate-600/50 text-white
           cursor-not-allowed`,
       },
       state: {
-        active: 'active:translate-y-1 active:border-b-[2px]',
+        active: 'active:translate-y-1 active:border-b-[2px] active:drop-shadow-md',
         inactive: '',
       }
     },

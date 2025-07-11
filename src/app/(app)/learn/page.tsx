@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { Progress } from "@/components/ui/progress";
-import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell } from "lucide-react";
+import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,36 +12,57 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ChevronDown } from "lucide-react";
 import { getCourses, Course, Lesson } from '@/lib/courses';
 import { ThreeDButton } from '@/components/ui/ThreeDButton';
 
+const iconMap: Record<string, React.ElementType> = {
+  BookOpen,
+  Code,
+  Braces,
+  Terminal,
+  Binary,
+  FunctionSquare,
+  Variable,
+  Repeat,
+  GitCommit,
+  GitBranch,
+  Puzzle,
+  Trophy,
+  Star,
+  Gift,
+  Dumbbell
+};
+
+
 const getNodeIcon = (lesson: Lesson, unlocked: boolean) => {
-    const commonClasses = "w-10 h-10";
+    const commonClasses = "w-10 h-10 text-white";
 
     if (!unlocked) {
-        return <Lock className={`${commonClasses} text-muted-foreground/50`} />;
+        return <Lock className="w-10 h-10 text-muted-foreground/60" />;
     }
 
     if (lesson.icon) {
-        return <span className="text-4xl">{lesson.icon}</span>;
+        const IconComponent = iconMap[lesson.icon];
+        if (IconComponent) {
+            return <IconComponent className={commonClasses} />;
+        }
     }
 
     switch (lesson.type) {
         case 'start':
-            return <Star className={`${commonClasses} text-white fill-white`} />;
+            return <Star className={`${commonClasses} fill-white`} />;
         case 'lesson':
-             return <BookOpen className={`${commonClasses} text-white`} />;
+             return <BookOpen className={commonClasses} />;
         case 'quiz':
-             return <Star className={`${commonClasses} text-white fill-white`} />;
+             return <Star className={`${commonClasses} fill-white`} />;
         case 'chest':
-            return <Gift className={`${commonClasses} text-white`} />;
+            return <Gift className={commonClasses} />;
         case 'guide':
-            return <BookOpen className={`${commonClasses} text-white`} />;
+            return <BookOpen className={commonClasses} />;
         case 'practice':
-            return <Dumbbell className={`${commonClasses} text-white`} />;
+            return <Dumbbell className={commonClasses} />;
         default:
-            return <Lock className={`${commonClasses} text-muted-foreground/30`} />;
+            return <Lock className="w-10 h-10 text-muted-foreground/30" />;
     }
 }
 
@@ -107,7 +128,7 @@ export default function LearnPage() {
     let variant: 'primary' | 'accent' | 'muted' = 'primary';
     if (!unlocked) {
       variant = 'muted';
-    } else if (lesson.type === 'quiz') {
+    } else if (lesson.type === 'quiz' || lesson.type === 'chest' || lesson.type === 'start') {
       variant = 'accent';
     }
 
@@ -185,7 +206,7 @@ export default function LearnPage() {
             <div className="absolute top-12 bottom-12 w-2 bg-repeat-y bg-[length:8px_24px] bg-[url('data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%2224%22%20viewBox%3D%220%200%208%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%224%22%20cy%3D%224%22%20r%3D%224%22%20fill%3D%22%23E5E5E5%22%2F%3E%3C%2Fsvg%3E%0A')]"></div>
             
             <div className="mb-8">
-              {renderNode({ type: 'start', title: selectedCourse.sections[0].title, lessonId: 'start' }, 0, true)}
+              {renderNode({ type: 'start', title: selectedCourse.sections[0].title, lessonId: 'start', icon: 'Star' }, 0, true)}
             </div>
 
             {allLessons.map((lesson, index) => {

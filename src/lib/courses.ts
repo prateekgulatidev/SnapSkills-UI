@@ -1,3 +1,4 @@
+
 export type LessonContentType = 'text' | 'code' | 'quiz';
 
 export interface TextContent {
@@ -78,7 +79,7 @@ const coursesData: Course[] = [
         "lessons": [
           {
             "lessonId": "lesson1",
-            "icon": "📘",
+            "icon": "BookOpen",
             "type": "lesson",
             "title": "What is Java?",
             "content": [
@@ -96,9 +97,9 @@ const coursesData: Course[] = [
           },
           {
             "lessonId": "lesson2",
-            "icon": "💻",
+            "icon": "Code",
             "type": "lesson",
-            "title": "Hello World in Java",
+            "title": "Hello World",
             "content": [
               {
                 "id": 3,
@@ -116,9 +117,9 @@ const coursesData: Course[] = [
           },
           {
             "lessonId": "lesson3",
-            "icon": "🧠",
+            "icon": "Puzzle",
             "type": "quiz",
-            "title": "Basic Java Concepts Quiz",
+            "title": "Basic Concepts Quiz",
             "content": [
               {
                 "id": 5,
@@ -143,7 +144,7 @@ const coursesData: Course[] = [
         "lessons": [
           {
             "lessonId": "lesson4",
-            "icon": "📦",
+            "icon": "Variable",
             "type": "lesson",
             "title": "Understanding Variables",
             "content": [
@@ -156,7 +157,7 @@ const coursesData: Course[] = [
           },
           {
             "lessonId": "lesson5",
-            "icon": "👨‍💻",
+            "icon": "Braces",
             "type": "lesson",
             "title": "Declaring Variables",
             "content": [
@@ -180,16 +181,23 @@ const coursesData: Course[] = [
         "sectionId": "section3",
         "title": "Operators and Expressions",
         "lessons": [
-          { "lessonId": "lesson6", "icon": "➕", "type": "lesson", "title": "Arithmetic and Logical Operators", "content": [{ "id": 9, "type": "text", "content": "Java provides various operators like +, -, *, /, %, ==, !=, >, <, &&, || for building expressions."}] },
-          { "lessonId": "lesson7", "icon": "🔢", "type": "lesson", "title": "Using Operators in Java", "content": [{"id": 10, "type": "code", "language": "java", "code": "int a = 5, b = 10;\nSystem.out.println(a + b); // 15"}] }
+          { "lessonId": "lesson6", "icon": "FunctionSquare", "type": "lesson", "title": "Operators", "content": [{"id": 9, "type": "text", "content": "This lesson is under construction."}] },
+          { "lessonId": "lesson7", "icon": "Terminal", "type": "lesson", "title": "Using Operators", "content": [{"id": 10, "type": "text", "content": "This lesson is under construction."}] }
         ]
       },
       {
         "sectionId": "section4",
         "title": "Control Flow - Conditionals",
         "lessons": [
-          { "lessonId": "lesson8", "icon": "🤔", "type": "lesson", "title": "If-Else Statements", "content": [{"id": 11, "type": "text", "content": "Control flow in Java lets you conditionally execute code using if, else if, and else blocks."}] },
-          { "lessonId": "lesson9", "icon": "✅", "type": "lesson", "title": "Conditional Example", "content": [{"id": 12, "type": "code", "language": "java", "code": "int score = 85;\nif(score >= 90) {\n  System.out.println(\"Excellent\");\n} else {\n  System.out.println(\"Keep improving\");\n}"}] }
+          { "lessonId": "lesson8", "icon": "GitBranch", "type": "lesson", "title": "If-Else Statements", "content": [{"id": 11, "type": "text", "content": "This lesson is under construction."}] },
+          { "lessonId": "lesson9", "icon": "GitCommit", "type": "lesson", "title": "Conditional Example", "content": [{"id": 12, "type": "text", "content": "This lesson is under construction."}] }
+        ]
+      },
+      {
+        "sectionId": "section5",
+        "title": "Final Quiz",
+        "lessons": [
+            { "lessonId": "quiz_final", "icon": "Trophy", "type": "quiz", "title": "Final Quiz", "content": [{"id": 13, "type": "text", "content": "This quiz is under construction."}] }
         ]
       }
     ],
@@ -207,8 +215,8 @@ const coursesData: Course[] = [
             "sectionId": "py_sec1",
             "title": "Python Fundamentals",
             "lessons": [
-                { "lessonId": "py_lesson1", "type": "lesson", "icon": "🐍", "title": "Intro to Python", "content": [{"id": 13, "type": "text", "content": "Python is a versatile language you can use for web development, data science, and more."}] },
-                { "lessonId": "py_lesson2", "type": "quiz", "icon": "🧠", "title": "Python Syntax", "content": [{ "id": 14, "type": "quiz", "question": "Which of these is a valid variable name in Python?", "options": ["my-var", "1var", "my_var", "$var"], "answerIndex": 2, "explanation": "Variable names in Python can only contain alpha-numeric characters and underscores, and cannot start with a number." }] }
+                { "lessonId": "py_lesson1", "type": "lesson", "icon": "Code", "title": "Intro to Python", "content": [{"id": 1, "type": "text", "content": "Python is a versatile language you can use for web development, data science, and more."}] },
+                { "lessonId": "py_lesson2", "type": "quiz", "icon": "Puzzle", "title": "Python Syntax", "content": [{ "id": 2, "type": "quiz", "question": "Which of these is a valid variable name in Python?", "options": ["my-var", "1var", "my_var", "$var"], "answerIndex": 2, "explanation": "Variable names in Python can only contain alpha-numeric characters and underscores, and cannot start with a number." }] }
             ]
         }
     ],
