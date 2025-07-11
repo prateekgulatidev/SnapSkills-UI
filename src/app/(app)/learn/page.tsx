@@ -184,7 +184,7 @@ export default function LearnPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <header className="p-4 space-y-4 border-b sticky top-0 bg-background z-10">
+      <header className="p-4 space-y-4 border-b sticky top-0 bg-background z-10 md:hidden">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
                 <div className="bg-accent/30 p-2 rounded-full">
@@ -219,6 +219,26 @@ export default function LearnPage() {
       </header>
 
       <main className="flex-grow overflow-y-auto p-4 md:p-8">
+        <div className="hidden md:flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold">{selectedCourse.title}</h1>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-auto justify-between h-12">
+                        <div className="text-left">
+                            <p className="text-base font-bold">Switch Course</p>
+                        </div>
+                        <ChevronDown className="h-5 w-5 ml-2"/>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    {courses.map(course => (
+                        <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
+                            {course.title}
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
         <div className="relative flex flex-col items-center">
             {selectedCourse.sections.map((section, sectionIndex) => (
                 <React.Fragment key={section.sectionId}>
