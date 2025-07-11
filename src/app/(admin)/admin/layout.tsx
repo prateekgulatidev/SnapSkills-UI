@@ -12,6 +12,7 @@ import {
   Users,
   BarChart,
   Shield,
+  Menu,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +25,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { TopNav } from "@/components/TopNav";
 import { cn } from "@/lib/utils";
 
 const adminNavItems = [
@@ -52,6 +52,16 @@ function AdminNavLink({ href, icon: Icon, label }: { href: string, icon: React.E
     )
 }
 
+function AdminNav() {
+    return (
+        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+            {adminNavItems.map(item => (
+                <AdminNavLink key={item.href} {...item} />
+            ))}
+        </nav>
+    );
+}
+
 
 export default function AdminLayout({
   children,
@@ -61,7 +71,6 @@ export default function AdminLayout({
     const pathname = usePathname();
     const pageTitle = adminNavItems.find(item => pathname.startsWith(item.href))?.label || 'Dashboard';
 
-    // Render children directly for the login page, without the main layout
     if (pathname === '/admin') {
         return <>{children}</>;
     }
@@ -77,11 +86,7 @@ export default function AdminLayout({
             </Link>
           </div>
           <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                {adminNavItems.map(item => (
-                    <AdminNavLink key={item.href} {...item} />
-                ))}
-            </nav>
+            <AdminNav />
           </div>
           <div className="mt-auto p-4">
             <Card>
@@ -102,12 +107,46 @@ export default function AdminLayout({
       </div>
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-            <div className="w-full flex-1">
-                <h1 className="text-lg font-semibold md:text-2xl">{pageTitle}</h1>
-            </div>
-            <Link href="/learn">
-                <Button>Back to App</Button>
-            </Link>
+           <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="shrink-0 md:hidden"
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="flex flex-col">
+              <Link href="/" className="flex items-center gap-2 text-lg font-semibold mb-4">
+                <Shield className="h-6 w-6 text-primary" />
+                <span>SnapSkills Admin</span>
+              </Link>
+              <AdminNav />
+               <div className="mt-auto">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Need Help?</CardTitle>
+                    <CardDescription>
+                      Check out our docs for more info.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button size="sm" className="w-full">
+                      Get Help
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </SheetContent>
+          </Sheet>
+          <div className="w-full flex-1 text-center md:text-left">
+            <h1 className="text-lg font-semibold md:text-2xl">{pageTitle}</h1>
+          </div>
+          <Link href="/learn">
+              <Button>Back to App</Button>
+          </Link>
         </header>
         {children}
       </div>
