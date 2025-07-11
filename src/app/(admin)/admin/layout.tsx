@@ -37,7 +37,7 @@ const adminNavItems = [
 
 function AdminNavLink({ href, icon: Icon, label }: { href: string, icon: React.ElementType, label: string }) {
     const pathname = usePathname();
-    const isActive = pathname === href;
+    const isActive = pathname.startsWith(href);
     return (
         <Link
             href={href}

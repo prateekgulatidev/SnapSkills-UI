@@ -74,13 +74,6 @@ export function TopNav() {
                     <span>Profile</span>
                   </DropdownMenuItem>
                 </Link>
-                <DropdownMenuSeparator />
-                <Link href="/admin/dashboard">
-                  <DropdownMenuItem>
-                    <Shield className="mr-2 h-4 w-4" />
-                    <span>Admin Panel</span>
-                  </DropdownMenuItem>
-                </Link>
               </DropdownMenuContent>
             </DropdownMenu>
 
