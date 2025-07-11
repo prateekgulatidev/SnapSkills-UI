@@ -26,10 +26,7 @@ export default function WelcomePage() {
       </main>
       <footer className="p-6 space-y-4">
         <Button asChild className="w-full h-12 text-base font-semibold">
-          <Link href="/signup">Get Started</Link>
-        </Button>
-        <Button asChild variant="outline" className="w-full h-12 text-base font-semibold">
-          <Link href="/login">I already have an account</Link>
+          <Link href="/learn">Get Started</Link>
         </Button>
       </footer>
     </div>
