@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { FileQuestion } from 'lucide-react';
 import Link from 'next/link';
 
-export default function QuizPage() {
+export default function QuizHubPage() {
   return (
     <div className="flex flex-col h-full">
       <header className="p-4 border-b">
