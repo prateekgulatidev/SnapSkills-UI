@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { courses } from "@/lib/courses";
+import { getCourse } from "@/lib/courses";
 import { List } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default function CoursePathPage({ params }: { params: { courseId: string } }) {
-  const course = courses.find(c => c.courseId === params.courseId);
+export default async function CoursePathPage({ params }: { params: { courseId: string } }) {
+  const course = await getCourse(params.courseId);
 
   if (!course) {
     notFound();

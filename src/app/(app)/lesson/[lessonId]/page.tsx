@@ -8,61 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
-import { courses, Lesson, Course, LessonContent } from '@/lib/courses';
-
-const LessonContentComponent = ({
-  content,
-  onQuizSubmit,
-  isQuizAnswered,
-  selectedAnswer,
-}: {
-  content: LessonContent;
-  onQuizSubmit: (correct: boolean) => void;
-  isQuizAnswered: boolean;
-  selectedAnswer: number | null;
-}) => {
-  switch (content.type) {
-    case 'text':
-      return <p className="text-lg text-muted-foreground">{content.content}</p>;
-    case 'code':
-      return (
-        <div className="w-full text-left">
-            <p className="text-lg text-muted-foreground mb-4">{content.text}</p>
-            <pre className="bg-muted p-4 rounded-md overflow-x-auto text-sm">
-              <code>{content.code}</code>
-            </pre>
-        </div>
-      );
-    case 'quiz':
-      return (
-        <div className="space-y-3 text-left w-full">
-          <p className="font-semibold text-xl mb-4">{content.question}</p>
-          {content.options.map((option, optionIndex) => (
-            <Button
-              key={option}
-              variant="outline"
-              className={`w-full h-auto py-3 justify-start text-base ${isQuizAnswered && selectedAnswer === optionIndex ? (optionIndex === content.answerIndex ? 'border-green-500 bg-green-500/10' : 'border-red-500 bg-red-500/10') : ''}`}
-              onClick={() => onQuizSubmit(optionIndex === content.answerIndex)}
-              disabled={isQuizAnswered}
-            >
-              {option}
-              {isQuizAnswered && selectedAnswer === optionIndex && (
-                optionIndex === content.answerIndex ? <Check className="ml-auto text-green-500" /> : <X className="ml-auto text-red-500" />
-              )}
-            </Button>
-          ))}
-          {isQuizAnswered && (
-            <div className={`mt-4 p-3 rounded-md text-sm text-left ${selectedAnswer === content.answerIndex ? 'bg-green-500/10 text-green-700 dark:text-green-300' : 'bg-red-500/10 text-red-700 dark:text-red-300'}`}>
-              {selectedAnswer === content.answerIndex ? 'Correct!' : `Not quite. Correct answer: ${content.options[content.answerIndex]}`}
-              <p className="mt-1">{content.explanation}</p>
-            </div>
-          )}
-        </div>
-      );
-    default:
-      return null;
-  }
-};
+import { getLesson, Lesson, Course, LessonContent } from '@/lib/courses';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LessonPage() {
   const params = useParams();
@@ -73,24 +20,56 @@ export default function LessonPage() {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [total, setTotal] = React.useState(0);
+  const [lesson, setLesson] = React.useState<Lesson | null | undefined>(undefined);
+  const [courseTitle, setCourseTitle] = React.useState<string>('');
 
   const [quizState, setQuizState] = React.useState<Record<number, { answered: boolean; selected: number | null; correct: boolean | null }>>({});
-
-  const { course, lesson } = React.useMemo(() => {
-    const course = courses.find((c) => c.courseId === courseId);
-    if (!course) return { course: undefined, lesson: undefined };
-    const lesson = course.sections.flatMap((s) => s.lessons).find((l) => l.lessonId === lessonId);
-    return { course, lesson };
+  
+  React.useEffect(() => {
+    async function loadLesson() {
+      if (courseId && lessonId) {
+        const result = await getLesson(courseId, lessonId);
+        if (result) {
+          setLesson(result.lesson);
+          setCourseTitle(result.course.title);
+        } else {
+          setLesson(null);
+        }
+      }
+    }
+    loadLesson();
   }, [courseId, lessonId]);
 
   React.useEffect(() => {
-    if (!api || !lesson) return;
+    if (!api || !lesson?.content) return;
     setTotal(lesson.content.length);
     setCurrent(api.selectedScrollSnap() + 1);
     api.on('select', () => setCurrent(api.selectedScrollSnap() + 1));
   }, [api, lesson]);
 
-  if (!course || !lesson) {
+  if (lesson === undefined) {
+    return (
+       <div className="flex flex-col h-screen bg-muted dark:bg-black">
+         <header className="p-2 space-y-2 border-b bg-background">
+            <div className="flex items-center justify-between px-2">
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+            <Progress value={0} className="h-2" />
+          </header>
+          <div className="p-4 h-full">
+            <Card className="h-full flex flex-col justify-center items-center text-center p-6 shadow-none border-0 bg-background">
+              <Skeleton className="h-8 w-48 mb-8" />
+              <Skeleton className="h-4 w-full mb-2" />
+              <Skeleton className="h-4 w-full mb-2" />
+              <Skeleton className="h-4 w-3/4" />
+            </Card>
+          </div>
+       </div>
+    )
+  }
+
+  if (lesson === null) {
     return notFound();
   }
 
@@ -112,14 +91,14 @@ export default function LessonPage() {
               <X className="h-6 w-6" />
             </Button>
           </Link>
-          <span className="text-sm font-medium">{course.title}</span>
+          <span className="text-sm font-medium">{courseTitle}</span>
         </div>
         <Progress value={progress} className="h-2" />
       </header>
 
       <Carousel setApi={setApi} orientation="vertical" className="w-full flex-grow">
         <CarouselContent className="-mt-1 h-full">
-          {lesson.content.map((contentItem, index) => {
+          {lesson.content && lesson.content.map((contentItem, index) => {
              const quizInfo = quizState[index] || { answered: false, selected: null };
             
              const handleLocalQuizSubmit = (selectedIdx: number, isCorrect: boolean) => {

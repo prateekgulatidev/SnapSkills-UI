@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react";
-import { courses as allCourses, Course, Lesson } from '@/lib/courses';
+import { getCourses, Course, Lesson } from '@/lib/courses';
 
 const getNodeIcon = (lesson: Lesson, completed: boolean) => {
     const isUnlocked = lesson.type === 'start' || completed;
@@ -73,10 +73,22 @@ const getNodeClasses = (type: string, completed: boolean, index: number) => {
 
 
 export default function LearnPage() {
-  const [selectedCourse, setSelectedCourse] = React.useState<Course>(allCourses[0]);
+  const [courses, setCourses] = React.useState<Course[]>([]);
+  const [selectedCourse, setSelectedCourse] = React.useState<Course | null>(null);
   const [completedLessons, setCompletedLessons] = React.useState<string[]>([]);
 
-  const allLessons = selectedCourse.sections.flatMap(s => s.lessons);
+  React.useEffect(() => {
+    async function loadCourses() {
+      const allCourses = await getCourses();
+      setCourses(allCourses);
+      if (allCourses.length > 0) {
+        setSelectedCourse(allCourses[0]);
+      }
+    }
+    loadCourses();
+  }, []);
+
+  const allLessons = selectedCourse?.sections.flatMap(s => s.lessons) ?? [];
 
   const handleCompleteLesson = (lessonId: string) => {
     if (!completedLessons.includes(lessonId)) {
@@ -84,6 +96,14 @@ export default function LearnPage() {
         setCompletedLessons(prev => [...prev, lessonId]);
       }, 300);
     }
+  }
+
+  if (!selectedCourse) {
+    return (
+        <div className="flex items-center justify-center h-full">
+            <p>Loading courses...</p>
+        </div>
+    )
   }
 
   return (
@@ -113,7 +133,7 @@ export default function LearnPage() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[calc(100vw-2rem)] md:w-[calc(512px-2rem)]">
-                {allCourses.map(course => (
+                {courses.map(course => (
                     <DropdownMenuItem key={course.courseId} onSelect={() => setSelectedCourse(course)}>
                         {course.title}
                     </DropdownMenuItem>
