@@ -46,26 +46,23 @@ const getNodeClasses = (type: string, completed: boolean, index: number) => {
     const isUnlocked = type === 'start' || completed;
     let positionClass = '';
 
-    if (index > 0) {
-      const pattern = (index-1) % 4;
-      if (pattern === 0) positionClass = 'justify-start ml-16';
-      if (pattern === 1) positionClass = 'justify-end mr-16';
-      if (pattern === 2) positionClass = 'justify-end mr-16';
-      if (pattern === 3) positionClass = 'justify-start ml-16';
-    } else {
+    if (index === 0) {
         positionClass = 'justify-center';
+    } else {
+        positionClass = index % 2 === 1 ? 'justify-start ml-16' : 'justify-end mr-16';
     }
-
-
+    
     const baseClasses = `relative flex items-center w-full my-4 ${positionClass}`;
     
     let colorClass = 'bg-muted';
     if (type === 'start') colorClass = 'bg-primary shadow-lg shadow-primary/50';
     if (completed) colorClass = 'bg-primary';
 
+    const animationClass = isUnlocked ? 'animate-in zoom-in-50' : '';
+
     return {
         wrapper: baseClasses,
-        node: `flex items-center justify-center w-24 h-24 rounded-full border-8 border-background ${colorClass} transition-all duration-300`,
+        node: `flex items-center justify-center w-24 h-24 rounded-full border-8 border-background ${colorClass} transition-all duration-300 ${animationClass}`,
         label: `absolute -bottom-10 text-center font-bold text-sm ${isUnlocked ? 'text-foreground' : 'text-muted-foreground/50'}`
     }
 }
