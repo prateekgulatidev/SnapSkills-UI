@@ -15,6 +15,7 @@ import {
   Shield,
   Menu,
   LogOut,
+  Upload,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
