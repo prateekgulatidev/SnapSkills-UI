@@ -101,7 +101,6 @@ export default function AdminCoursesPage() {
                 {courses.map((course) => (
                     <TableRow key={course.courseId}>
                         <TableCell className="font-medium">
-                            console.log('course.courseId:', course.courseId);
                             <Link href={`/admin/course/${course.courseId}`} className="hover:underline">
                                 {course.title}
                             </Link>

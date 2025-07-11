@@ -64,7 +64,7 @@ export interface Course {
 
 const coursesData: Course[] = [
   {
-    "courseId": "course_java_basics",
+    "courseId": "java-basics",
     "title": "Java Programming - Basics",
     "description": "Learn Java from scratch. Start with variables, loops, conditionals, and object-oriented programming.",
     "level": "Beginner",
@@ -276,7 +276,7 @@ const coursesData: Course[] = [
     "rating": 4.8, "reviews": 127, "isFree": true
   },
   {
-    "courseId": "course_python_basics",
+    "courseId": "python-basics",
     "title": "Python Programming - From Scratch",
     "description": "A comprehensive introduction to Python programming. Covers fundamental concepts like variables, data types, control flow, functions, and an introduction to data structures. Perfect for absolute beginners.",
     "level": "Beginner",

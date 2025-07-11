@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { getCourse, Course, Lesson } from '@/lib/courses';
+import { getCourse, Course, Lesson, Section } from '@/lib/courses';
 import { getUsers, User } from '@/lib/users';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,6 +36,8 @@ import {
   BookMarked,
   Settings,
 } from 'lucide-react';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+
 
 export default function AdminCourseDetailPage() {
   const params = useParams();
@@ -64,6 +66,56 @@ export default function AdminCourseDetailPage() {
     }
     fetchData();
   }, [courseId]);
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination || !course) return;
+
+    const { source, destination, type } = result;
+
+    if (type === 'section') {
+      const reorderedSections = Array.from(course.sections);
+      const [movedSection] = reorderedSections.splice(source.index, 1);
+      reorderedSections.splice(destination.index, 0, movedSection);
+      setCourse({ ...course, sections: reorderedSections });
+    }
+
+    if (type === 'lesson') {
+      const sourceSectionId = source.droppableId;
+      const destSectionId = destination.droppableId;
+      
+      const newSections = Array.from(course.sections);
+      const sourceSection = newSections.find(s => s.sectionId === sourceSectionId);
+      const destSection = newSections.find(s => s.sectionId === destSectionId);
+
+      if (!sourceSection || !destSection) return;
+
+      // Moving within the same section
+      if (sourceSectionId === destSectionId) {
+        const reorderedLessons = Array.from(sourceSection.lessons);
+        const [movedLesson] = reorderedLessons.splice(source.index, 1);
+        reorderedLessons.splice(destination.index, 0, movedLesson);
+        
+        const sectionIndex = newSections.findIndex(s => s.sectionId === sourceSectionId);
+        newSections[sectionIndex].lessons = reorderedLessons;
+        setCourse({ ...course, sections: newSections });
+      } else {
+        // Moving between different sections
+        const sourceLessons = Array.from(sourceSection.lessons);
+        const [movedLesson] = sourceLessons.splice(source.index, 1);
+
+        const destLessons = Array.from(destSection.lessons);
+        destLessons.splice(destination.index, 0, movedLesson);
+
+        const sourceSectionIndex = newSections.findIndex(s => s.sectionId === sourceSectionId);
+        const destSectionIndex = newSections.findIndex(s => s.sectionId === destSectionId);
+
+        newSections[sourceSectionIndex].lessons = sourceLessons;
+        newSections[destSectionIndex].lessons = destLessons;
+        setCourse({ ...course, sections: newSections });
+      }
+    }
+  };
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -200,38 +252,64 @@ export default function AdminCourseDetailPage() {
                         <Button size="sm"><PlusCircle className="mr-2 h-4 w-4"/>Add Section</Button>
                     </CardHeader>
                     <CardContent>
-                       <Accordion type="multiple" defaultValue={['section1']} className="w-full">
-                          {course.sections?.map(section => (
-                            <AccordionItem value={section.sectionId} key={section.sectionId}>
-                              <AccordionTrigger className="font-bold text-lg hover:no-underline">
-                                <div className="flex items-center gap-2">
-                                    <GripVertical className="h-5 w-5 text-muted-foreground" />
-                                    {section.title}
-                                </div>
-                              </AccordionTrigger>
-                              <AccordionContent className="pl-8">
-                                <div className="space-y-2">
-                                {section.lessons.map(lesson => (
-                                    <Card key={lesson.lessonId}>
-                                        <CardContent className="p-3 flex items-center justify-between">
-                                            <div className='flex items-center gap-2'>
-                                                <GripVertical className="h-5 w-5 text-muted-foreground" />
-                                                <p>{lesson.title}</p>
-                                                <Badge variant="outline">{lesson.type}</Badge>
-                                            </div>
+                      <DragDropContext onDragEnd={handleDragEnd}>
+                        <Droppable droppableId="sections" type="section">
+                          {(provided) => (
+                            <div {...provided.droppableProps} ref={provided.innerRef}>
+                              <Accordion type="multiple" defaultValue={['section1']} className="w-full">
+                                {course.sections?.map((section, index) => (
+                                  <Draggable key={section.sectionId} draggableId={section.sectionId} index={index}>
+                                    {(provided) => (
+                                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                        <AccordionItem value={section.sectionId}>
+                                          <AccordionTrigger className="font-bold text-lg hover:no-underline">
                                             <div className="flex items-center gap-2">
-                                                <Button variant="outline" size="sm">Edit</Button>
-                                                <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="h-4 w-4"/></Button>
+                                              <GripVertical className="h-5 w-5 text-muted-foreground" />
+                                              {section.title}
                                             </div>
-                                        </CardContent>
-                                    </Card>
+                                          </AccordionTrigger>
+                                          <AccordionContent className="pl-8">
+                                            <Droppable droppableId={section.sectionId} type="lesson">
+                                              {(provided) => (
+                                                <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
+                                                  {section.lessons.map((lesson, lessonIndex) => (
+                                                    <Draggable key={lesson.lessonId} draggableId={lesson.lessonId} index={lessonIndex}>
+                                                      {(provided) => (
+                                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                          <Card>
+                                                            <CardContent className="p-3 flex items-center justify-between">
+                                                              <div className='flex items-center gap-2'>
+                                                                <GripVertical className="h-5 w-5 text-muted-foreground" />
+                                                                <p>{lesson.title}</p>
+                                                                <Badge variant="outline">{lesson.type}</Badge>
+                                                              </div>
+                                                              <div className="flex items-center gap-2">
+                                                                <Button variant="outline" size="sm">Edit</Button>
+                                                                <Button variant="ghost" size="icon" className="h-8 w-8"><Trash2 className="h-4 w-4"/></Button>
+                                                              </div>
+                                                            </CardContent>
+                                                          </Card>
+                                                        </div>
+                                                      )}
+                                                    </Draggable>
+                                                  ))}
+                                                  {provided.placeholder}
+                                                  <Button variant="outline" className="w-full mt-4"><PlusCircle className="mr-2 h-4 w-4"/>Add Lesson</Button>
+                                                </div>
+                                              )}
+                                            </Droppable>
+                                          </AccordionContent>
+                                        </AccordionItem>
+                                      </div>
+                                    )}
+                                  </Draggable>
                                 ))}
-                                 <Button variant="outline" className="w-full mt-4"><PlusCircle className="mr-2 h-4 w-4"/>Add Lesson</Button>
-                                </div>
-                              </AccordionContent>
-                            </AccordionItem>
-                          ))}
-                        </Accordion>
+                                {provided.placeholder}
+                              </Accordion>
+                            </div>
+                          )}
+                        </Droppable>
+                      </DragDropContext>
                     </CardContent>
                  </Card>
             </TabsContent>
@@ -276,7 +354,7 @@ export default function AdminCourseDetailPage() {
               </div>
               <div className="grid gap-3">
                   <Label htmlFor="slug">URL Slug</Label>
-                  <Input id="slug" defaultValue={`/courses/${course.courseId.replace('course_', '')}`} />
+                  <Input id="slug" defaultValue={`/courses/${course.courseId}`} />
               </div>
               <div className="grid gap-3">
                   <Label htmlFor="seo-title">SEO Title</Label>
