@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -69,21 +70,24 @@ export default function LessonPage() {
   if (lesson === undefined) {
     return (
        <div className="flex flex-col h-screen bg-muted dark:bg-black">
-         <header className="p-2 space-y-2 border-b bg-background">
+         <header className="p-2 space-y-2 border-b bg-background sticky top-0 z-10">
             <div className="flex items-center justify-between px-2">
               <Skeleton className="h-10 w-10 rounded-full" />
               <Skeleton className="h-4 w-24" />
             </div>
             <Progress value={0} className="h-2" />
           </header>
-          <div className="p-4 h-full">
+          <main className="flex-grow p-4">
             <Card className="h-full flex flex-col justify-center items-center text-center p-6 shadow-none border-0 bg-background">
               <Skeleton className="h-8 w-48 mb-8" />
               <Skeleton className="h-4 w-full mb-2" />
               <Skeleton className="h-4 w-full mb-2" />
               <Skeleton className="h-4 w-3/4" />
             </Card>
-          </div>
+          </main>
+          <footer className="p-4 border-t bg-background sticky bottom-0 z-10">
+            <Skeleton className="w-full h-12" />
+          </footer>
        </div>
     )
   }
