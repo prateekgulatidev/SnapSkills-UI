@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { getCourses, Course, Lesson } from '@/lib/courses';
 import { ThreeDButton } from '@/components/ui/ThreeDButton';
+import { motion } from 'framer-motion';
 
 const iconMap: Record<string, React.ElementType> = {
   BookOpen,
@@ -47,32 +48,18 @@ const getNodeIcon = (lesson: Lesson, unlocked: boolean) => {
             return <IconComponent className={commonClasses} />;
         }
     }
-
-    switch (lesson.type) {
-        case 'start':
-            return <Star className={`${commonClasses} fill-white`} />;
-        case 'lesson':
-             return <BookOpen className={commonClasses} />;
-        case 'quiz':
-             return <Star className={`${commonClasses} fill-white`} />;
-        case 'chest':
-            return <Gift className={commonClasses} />;
-        case 'guide':
-            return <BookOpen className={commonClasses} />;
-        case 'practice':
-            return <Dumbbell className={commonClasses} />;
-        default:
-            return <Lock className="w-10 h-10 text-muted-foreground/30" />;
-    }
+    
+    // Fallback icon
+    return <BookOpen className={commonClasses} />;
 }
 
 const getNodeClasses = (index: number) => {
     let positionClass = '';
 
-    if (index === 0) {
+    if (index === 0) { // First item should be centered
         positionClass = 'justify-center';
     } else {
-        positionClass = (index) % 2 === 1 ? 'justify-start pl-16' : 'justify-end pr-16';
+        positionClass = (index) % 2 === 1 ? 'justify-start pl-8' : 'justify-end pr-8';
     }
     
     return `relative flex items-center w-full my-4 ${positionClass}`;
@@ -108,7 +95,6 @@ export default function LearnPage() {
     }
   }, [selectedCourse]);
 
-  const allLessons = selectedCourse?.sections.flatMap(s => s.lessons) ?? [];
 
   const handleCourseSelect = (course: Course) => {
     setSelectedCourse(course);
@@ -122,34 +108,58 @@ export default function LearnPage() {
     )
   }
 
-  const renderNode = (lesson: Lesson, index: number, unlocked: boolean) => {
-    const isCompleted = completedLessons.includes(lesson.lessonId);
+  const allLessonsInCourse = selectedCourse.sections.flatMap(s => s.lessons);
+  const getLessonIndex = (lessonId: string) => allLessonsInCourse.findIndex(l => l.lessonId === lessonId);
+
+  const renderNode = (lesson: Lesson, sectionIndex: number, lessonIndexInSection: number) => {
+    const overallLessonIndex = getLessonIndex(lesson.lessonId);
     
+    const isCompleted = completedLessons.includes(lesson.lessonId);
+    const isFirstLessonOfCourse = overallLessonIndex === 0;
+    
+    let isPreviousCompleted = false;
+    if (isFirstLessonOfCourse) {
+        isPreviousCompleted = true; // The very first lesson is always unlocked
+    } else {
+        const previousLesson = allLessonsInCourse[overallLessonIndex - 1];
+        if (previousLesson) {
+            isPreviousCompleted = completedLessons.includes(previousLesson.lessonId);
+        }
+    }
+    
+    const isUnlocked = isCompleted || isPreviousCompleted;
+
     let variant: 'primary' | 'accent' | 'muted' = 'primary';
-    if (!unlocked) {
+    if (!isUnlocked) {
       variant = 'muted';
     } else if (lesson.type === 'quiz' || lesson.type === 'chest' || lesson.type === 'start') {
       variant = 'accent';
     }
 
-    const wrapperClasses = getNodeClasses(index);
-    const labelClasses = `absolute -bottom-10 text-center font-bold text-sm ${unlocked ? 'text-foreground' : 'text-muted-foreground/50'}`;
+    const wrapperClasses = getNodeClasses(overallLessonIndex);
+    const labelClasses = `absolute -bottom-10 text-center font-bold text-sm ${isUnlocked ? 'text-foreground' : 'text-muted-foreground/50'}`;
 
     const buttonContent = (
       <div className={wrapperClasses}>
-        <ThreeDButton 
-          variant={variant}
-          state={unlocked ? 'active' : 'inactive'}
-          className="w-24 h-24 rounded-full"
-          disabled={!unlocked}
+        <motion.div
+          initial={{ scale: isUnlocked ? 1 : 0.8, opacity: isUnlocked ? 1 : 0.7 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: isUnlocked ? 0.1 : 0 }}
         >
-          {getNodeIcon(lesson, unlocked)}
-        </ThreeDButton>
+          <ThreeDButton 
+            variant={variant}
+            state={isUnlocked ? 'active' : 'inactive'}
+            className="w-24 h-24 rounded-full"
+            disabled={!isUnlocked}
+          >
+            {getNodeIcon(lesson, isUnlocked)}
+          </ThreeDButton>
+        </motion.div>
         <span className={labelClasses}>{lesson.title}</span>
       </div>
     );
 
-    if (unlocked) {
+    if (isUnlocked) {
       return (
         <Link key={lesson.lessonId} href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`} className="w-full">
            {buttonContent}
@@ -163,6 +173,14 @@ export default function LearnPage() {
       </div>
     )
   }
+
+  const renderSectionHeader = (title: string) => (
+    <div className="flex items-center w-full my-12" key={title}>
+      <div className="flex-grow border-t-2 border-dashed border-border"></div>
+      <h2 className="mx-4 text-lg font-bold text-muted-foreground uppercase tracking-wider">{title}</h2>
+      <div className="flex-grow border-t-2 border-dashed border-border"></div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full">
@@ -205,17 +223,14 @@ export default function LearnPage() {
             {/* Dotted line */}
             <div className="absolute top-12 bottom-12 w-2 bg-repeat-y bg-[length:8px_24px] bg-[url('data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%2224%22%20viewBox%3D%220%200%208%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%224%22%20cy%3D%224%22%20r%3D%224%22%20fill%3D%22%23E5E5E5%22%2F%3E%3C%2Fsvg%3E%0A')]"></div>
             
-            <div className="mb-8">
-              {renderNode({ type: 'start', title: selectedCourse.sections[0].title, lessonId: 'start', icon: 'Star' }, 0, true)}
-            </div>
-
-            {allLessons.map((lesson, index) => {
-                const isCompleted = completedLessons.includes(lesson.lessonId);
-                const isPreviousCompleted = index === 0 || completedLessons.includes(allLessons[index-1]?.lessonId);
-                const isUnlocked = isCompleted || isPreviousCompleted;
-
-                return renderNode(lesson, index + 1, isUnlocked);
-            })}
+            {selectedCourse.sections.map((section, sectionIndex) => (
+                <React.Fragment key={section.sectionId}>
+                    {renderSectionHeader(section.title)}
+                    {section.lessons.map((lesson, lessonIndex) => (
+                        renderNode(lesson, sectionIndex, lessonIndex)
+                    ))}
+                </React.Fragment>
+            ))}
         </div>
       </main>
     </div>
