@@ -6,23 +6,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { Activity, BookOpen, Users, DollarSign, BarChart2 } from "lucide-react";
-
-const data = [
-  { name: "Jan", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Feb", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Mar", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Apr", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "May", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Jun", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Jul", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Aug", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Sep", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Oct", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Nov", total: Math.floor(Math.random() * 500) + 100 },
-  { name: "Dec", total: Math.floor(Math.random() * 500) + 100 },
-];
+import { useEffect, useState } from "react";
 
 export default function AdminDashboardPage() {
+    const [data, setData] = useState<any[]>([]);
+
+    useEffect(() => {
+        setData([
+            { name: "Jan", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Feb", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Mar", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Apr", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "May", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Jun", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Jul", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Aug", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Sep", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Oct", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Nov", total: Math.floor(Math.random() * 500) + 100 },
+            { name: "Dec", total: Math.floor(Math.random() * 500) + 100 },
+        ]);
+    }, []);
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
