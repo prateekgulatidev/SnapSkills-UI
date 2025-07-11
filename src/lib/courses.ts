@@ -24,7 +24,7 @@ export type LessonContent = TextContent | CodeContent | QuizContent;
 
 export interface Lesson {
   lessonId: string;
-  type: 'text' | 'code' | 'quiz' | 'start' | 'lesson' | 'chest' | 'guide' | 'practice';
+  type: 'start' | 'lesson' | 'quiz' | 'chest' | 'guide' | 'practice';
   icon?: string;
   title: string;
   content?: LessonContent[];
@@ -119,7 +119,7 @@ const coursesData: Course[] = [
                   "Ends the program"
                 ],
                 "answerIndex": 1,
-                "explanation": "System.out.println() outputs text to the console."
+                "explanation": "System.out.println() is used to print a line of text to the console."
               }
             ]
           }
@@ -144,7 +144,7 @@ const coursesData: Course[] = [
           {
             "lessonId": "lesson5",
             "icon": "👨‍💻",
-            "type": "code",
+            "type": "lesson",
             "title": "Declaring Variables",
             "content": [
               {
@@ -166,7 +166,7 @@ const coursesData: Course[] = [
         "title": "Operators and Expressions",
         "lessons": [
           { "lessonId": "lesson6", "icon": "➕", "type": "lesson", "title": "Arithmetic and Logical Operators", "content": [{ "type": "text", "content": "Java provides various operators like +, -, *, /, %, ==, !=, >, <, &&, || for building expressions."}] },
-          { "lessonId": "lesson7", "icon": "🔢", "type": "code", "title": "Using Operators in Java", "content": [{"type": "code", "language": "java", "code": "int a = 5, b = 10;\nSystem.out.println(a + b); // 15"}] }
+          { "lessonId": "lesson7", "icon": "🔢", "type": "lesson", "title": "Using Operators in Java", "content": [{"type": "code", "language": "java", "code": "int a = 5, b = 10;\nSystem.out.println(a + b); // 15"}] }
         ]
       },
       {
@@ -174,7 +174,7 @@ const coursesData: Course[] = [
         "title": "Control Flow - Conditionals",
         "lessons": [
           { "lessonId": "lesson8", "icon": "🤔", "type": "lesson", "title": "If-Else Statements", "content": [{"type": "text", "content": "Control flow in Java lets you conditionally execute code using if, else if, and else blocks."}] },
-          { "lessonId": "lesson9", "icon": "✅", "type": "code", "title": "Conditional Example", "content": [{"type": "code", "language": "java", "code": "int score = 85;\nif(score >= 90) {\n  System.out.println(\"Excellent\");\n} else {\n  System.out.println(\"Keep improving\");\n}"}] }
+          { "lessonId": "lesson9", "icon": "✅", "type": "lesson", "title": "Conditional Example", "content": [{"type": "code", "language": "java", "code": "int score = 85;\nif(score >= 90) {\n  System.out.println(\"Excellent\");\n} else {\n  System.out.println(\"Keep improving\");\n}"}] }
         ]
       }
     ],
@@ -221,8 +221,16 @@ export async function getLesson(courseId: string, lessonId: string): Promise<{ c
   const course = coursesData.find(c => c.courseId === courseId);
   if (!course) return undefined;
 
-  const lesson = course.sections.flatMap(s => s.lessons).find(l => l.lessonId === lessonId);
-  if (!lesson) return undefined;
+  for (const section of course.sections) {
+    const lesson = section.lessons.find(l => l.lessonId === lessonId);
+    if (lesson) {
+        // Ensure lesson content exists, even if empty
+        if (!lesson.content) {
+            lesson.content = [{ type: 'text', content: 'This lesson is under construction.' }];
+        }
+        return JSON.parse(JSON.stringify({ course, lesson }));
+    }
+  }
 
-  return JSON.parse(JSON.stringify({ course, lesson }));
+  return undefined;
 }

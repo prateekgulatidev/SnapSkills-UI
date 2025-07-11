@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel';
-import { getLesson, Lesson, Course, LessonContent } from '@/lib/courses';
+import { getLesson, Lesson, LessonContent } from '@/lib/courses';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LessonPage() {
@@ -164,10 +164,10 @@ export default function LessonPage() {
                         </div>
                       )}
 
-                      {quizInfo.answered && contentItem.type === 'quiz' && (
+                      {quizInfo.answered && contentItem.type === 'quiz' && contentItem.explanation && (
                         <div className={`w-full max-w-md mt-4 p-3 rounded-md text-sm text-left ${quizInfo.correct ? 'bg-green-500/10 text-green-700' : 'bg-red-500/10 text-red-700'}`}>
                           <p className='font-bold'>{quizInfo.correct ? 'Correct!' : 'Not quite.'}</p>
-                          {contentItem.explanation}
+                          <p>{contentItem.explanation}</p>
                         </div>
                       )}
 

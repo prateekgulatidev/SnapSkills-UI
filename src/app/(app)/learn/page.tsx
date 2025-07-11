@@ -31,8 +31,7 @@ const getNodeIcon = (lesson: Lesson, completed: boolean) => {
         case 'start':
             return <Star className={`${commonClasses} text-white fill-white`} />;
         case 'lesson':
-        case 'text':
-        case 'code':
+             return <BookOpen className={`${commonClasses} text-white`} />;
         case 'quiz':
              return <Star className={`${commonClasses} text-white fill-white`} />;
         case 'chest':
@@ -60,6 +59,7 @@ const getNodeClasses = (type: string, completed: boolean, index: number) => {
     
     let colorClass = 'bg-muted';
     if (type === 'start') colorClass = 'bg-primary shadow-lg shadow-primary/50';
+    if (type === 'quiz') colorClass = 'bg-accent shadow-lg shadow-accent/50';
     if (completed) colorClass = 'bg-primary';
 
     const animationClass = isUnlocked ? 'animate-in zoom-in-75' : '';
