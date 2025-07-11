@@ -220,9 +220,6 @@ export default function LearnPage() {
 
       <main className="flex-grow overflow-y-auto p-4 md:p-8">
         <div className="relative flex flex-col items-center">
-            {/* Dotted line */}
-            <div className="absolute top-12 bottom-12 w-2 bg-repeat-y bg-[length:8px_24px] bg-[url('data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%2224%22%20viewBox%3D%220%200%208%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle%20cx%3D%224%22%20cy%3D%224%22%20r%3D%224%22%20fill%3D%22%23E5E5E5%22%2F%3E%3C%2Fsvg%3E%0A')]"></div>
-            
             {selectedCourse.sections.map((section, sectionIndex) => (
                 <React.Fragment key={section.sectionId}>
                     {renderSectionHeader(section.title)}
