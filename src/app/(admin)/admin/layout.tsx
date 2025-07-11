@@ -35,6 +35,7 @@ const adminNavItems = [
     { href: '/admin/courses', icon: BookOpen, label: 'Courses' },
     { href: '/admin/users', icon: Users, label: 'Users' },
     { href: '/admin/analytics', icon: BarChart, label: 'Analytics' },
+    { href: '/admin/content-tools', icon: Upload, label: 'Content Tools' },
     { href: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 
