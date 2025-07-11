@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
                     <Label htmlFor="password">Password</Label>
                     <Input id="password" type="password" required />
                 </div>
-                <Button type="submit" className="w-full h-11 text-base asChild>
+                <Button type="submit" className="w-full h-11 text-base" asChild>
                     <Link href="/admin/dashboard">Login</Link>
                 </Button>
                 </form>
