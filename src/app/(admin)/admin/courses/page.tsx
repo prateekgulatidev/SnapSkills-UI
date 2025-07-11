@@ -74,7 +74,7 @@ export default function AdminCoursesPage() {
                             <DropdownMenuCheckboxItem
                                 key={level}
                                 checked={levelFilter === level}
-                                onSelect={() => setLevelFilter(level)}
+                                onCheckedChange={() => setLevelFilter(level)}
                             >
                                 {level}
                             </DropdownMenuCheckboxItem>
@@ -100,7 +100,11 @@ export default function AdminCoursesPage() {
                 <TableBody>
                 {courses.map((course) => (
                     <TableRow key={course.courseId}>
-                        <TableCell className="font-medium">{course.title}</TableCell>
+                        <TableCell className="font-medium">
+                            <Link href={`/admin/courses/${course.courseId}`} className="hover:underline">
+                                {course.title}
+                            </Link>
+                        </TableCell>
                         <TableCell className="hidden md:table-cell">
                             <Badge variant="outline">{course.level}</Badge>
                         </TableCell>
