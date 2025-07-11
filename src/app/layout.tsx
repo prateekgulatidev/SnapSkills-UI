@@ -21,8 +21,8 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased")}>
-        <div className="bg-gray-100 dark:bg-black">
-          <main className="relative mx-auto flex min-h-screen w-full max-w-5xl flex-col border-x border-gray-200 bg-background shadow-2xl dark:border-gray-800">
+        <div className="bg-background dark:bg-black">
+          <main className="relative flex min-h-screen w-full flex-col">
               {children}
           </main>
         </div>
