@@ -126,7 +126,7 @@ export default function AdminDashboardPage() {
                     olivia.martin@email.com
                   </p>
                 </div>
-                <div className="ml-auto font-medium">+1,999.00</div>
+                <div className="ml-auto font-medium text-sm text-muted-foreground">Jul 10, 2024</div>
               </div>
               <div className="flex items-center">
                 <Avatar className="flex h-9 w-9 items-center justify-center space-y-0 border">
@@ -139,7 +139,7 @@ export default function AdminDashboardPage() {
                     jackson.lee@email.com
                   </p>
                 </div>
-                <div className="ml-auto font-medium">+39.00</div>
+                <div className="ml-auto font-medium text-sm text-muted-foreground">Jul 9, 2024</div>
               </div>
               <div className="flex items-center">
                 <Avatar className="h-9 w-9">
@@ -154,7 +154,7 @@ export default function AdminDashboardPage() {
                     isabella.nguyen@email.com
                   </p>
                 </div>
-                <div className="ml-auto font-medium">+299.00</div>
+                <div className="ml-auto font-medium text-sm text-muted-foreground">Jul 9, 2024</div>
               </div>
                <div className="flex items-center">
                 <Avatar className="h-9 w-9">
@@ -167,7 +167,7 @@ export default function AdminDashboardPage() {
                     sofia.davis@email.com
                   </p>
                 </div>
-                <div className="ml-auto font-medium">+99.00</div>
+                <div className="ml-auto font-medium text-sm text-muted-foreground">Jul 8, 2024</div>
               </div>
                <div className="flex items-center">
                 <Avatar className="h-9 w-9">
@@ -180,7 +180,7 @@ export default function AdminDashboardPage() {
                     leo.patel@email.com
                   </p>
                 </div>
-                <div className="ml-auto font-medium">+45.50</div>
+                <div className="ml-auto font-medium text-sm text-muted-foreground">Jul 7, 2024</div>
               </div>
             </div>
           </CardContent>
