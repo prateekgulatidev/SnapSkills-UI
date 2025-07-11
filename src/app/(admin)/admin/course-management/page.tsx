@@ -101,7 +101,8 @@ export default function AdminCoursesPage() {
                 {courses.map((course) => (
                     <TableRow key={course.courseId}>
                         <TableCell className="font-medium">
-                            <Link href={`/admin/course-management/${course.courseId}`} className="hover:underline">
+                            console.log('course.courseId:', course.courseId);
+                            <Link href={`/admin/course/${course.courseId}`} className="hover:underline">
                                 {course.title}
                             </Link>
                         </TableCell>
@@ -121,7 +122,7 @@ export default function AdminCoursesPage() {
                             <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <DropdownMenuItem asChild>
-                                    <Link href={`/admin/course-management/${course.courseId}`}>Edit</Link>
+                                    <Link href={`/admin/course/${course.courseId}`}>Edit</Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>Delete</DropdownMenuItem>
                             </DropdownMenuContent>
