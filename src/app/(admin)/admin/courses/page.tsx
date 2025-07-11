@@ -23,6 +23,7 @@ import {
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import Link from 'next/link';
 
 export default function AdminCoursesPage() {
   const [courses, setCourses] = React.useState<Course[]>([]);
@@ -115,7 +116,9 @@ export default function AdminCoursesPage() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href={`/admin/courses/${course.courseId}`}>Edit</Link>
+                                </DropdownMenuItem>
                                 <DropdownMenuItem>Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                             </DropdownMenu>
