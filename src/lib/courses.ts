@@ -1,11 +1,13 @@
 export type LessonContentType = 'text' | 'code' | 'quiz';
 
 export interface TextContent {
+  id: number;
   type: 'text';
   content: string;
 }
 
 export interface CodeContent {
+  id: number;
   type: 'code';
   text?: string;
   language: string;
@@ -13,6 +15,7 @@ export interface CodeContent {
 }
 
 export interface QuizContent {
+  id: number;
   type: 'quiz';
   question: string;
   options: string[];
@@ -32,7 +35,7 @@ export interface Lesson {
 
 export interface Section {
   sectionId: string;
-  title: string;
+  title:string;
   lessons: Lesson[];
 }
 
@@ -80,8 +83,14 @@ const coursesData: Course[] = [
             "title": "What is Java?",
             "content": [
               {
+                "id": 1,
                 "type": "text",
                 "content": "Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible."
+              },
+              {
+                "id": 2,
+                "type": "text",
+                "content": "It is a general-purpose programming language intended to let application developers write once, run anywhere (WORA)."
               }
             ]
           },
@@ -92,10 +101,12 @@ const coursesData: Course[] = [
             "title": "Hello World in Java",
             "content": [
               {
+                "id": 3,
                 "type": "text",
                 "content": "Here's how you write your first Java program:"
               },
               {
+                "id": 4,
                 "type": "code",
                 "language": "java",
                 "text": "This code prints 'Hello, SnapSkills!' to the console.",
@@ -110,6 +121,7 @@ const coursesData: Course[] = [
             "title": "Basic Java Concepts Quiz",
             "content": [
               {
+                "id": 5,
                 "type": "quiz",
                 "question": "What does `System.out.println()` do?",
                 "options": [
@@ -136,6 +148,7 @@ const coursesData: Course[] = [
             "title": "Understanding Variables",
             "content": [
               {
+                "id": 6,
                 "type": "text",
                 "content": "Variables are named containers for storing data in memory. In Java, each variable must have a declared type."
               }
@@ -148,10 +161,12 @@ const coursesData: Course[] = [
             "title": "Declaring Variables",
             "content": [
               {
+                "id": 7,
                 "type": "text",
                 "content": "Here's how you declare and initialize variables in Java:"
               },
               {
+                "id": 8,
                 "type": "code",
                 "language": "java",
                 "text": "This creates an integer `age` and a string `name`.",
@@ -165,16 +180,16 @@ const coursesData: Course[] = [
         "sectionId": "section3",
         "title": "Operators and Expressions",
         "lessons": [
-          { "lessonId": "lesson6", "icon": "➕", "type": "lesson", "title": "Arithmetic and Logical Operators", "content": [{ "type": "text", "content": "Java provides various operators like +, -, *, /, %, ==, !=, >, <, &&, || for building expressions."}] },
-          { "lessonId": "lesson7", "icon": "🔢", "type": "lesson", "title": "Using Operators in Java", "content": [{"type": "code", "language": "java", "code": "int a = 5, b = 10;\nSystem.out.println(a + b); // 15"}] }
+          { "lessonId": "lesson6", "icon": "➕", "type": "lesson", "title": "Arithmetic and Logical Operators", "content": [{ "id": 9, "type": "text", "content": "Java provides various operators like +, -, *, /, %, ==, !=, >, <, &&, || for building expressions."}] },
+          { "lessonId": "lesson7", "icon": "🔢", "type": "lesson", "title": "Using Operators in Java", "content": [{"id": 10, "type": "code", "language": "java", "code": "int a = 5, b = 10;\nSystem.out.println(a + b); // 15"}] }
         ]
       },
       {
         "sectionId": "section4",
         "title": "Control Flow - Conditionals",
         "lessons": [
-          { "lessonId": "lesson8", "icon": "🤔", "type": "lesson", "title": "If-Else Statements", "content": [{"type": "text", "content": "Control flow in Java lets you conditionally execute code using if, else if, and else blocks."}] },
-          { "lessonId": "lesson9", "icon": "✅", "type": "lesson", "title": "Conditional Example", "content": [{"type": "code", "language": "java", "code": "int score = 85;\nif(score >= 90) {\n  System.out.println(\"Excellent\");\n} else {\n  System.out.println(\"Keep improving\");\n}"}] }
+          { "lessonId": "lesson8", "icon": "🤔", "type": "lesson", "title": "If-Else Statements", "content": [{"id": 11, "type": "text", "content": "Control flow in Java lets you conditionally execute code using if, else if, and else blocks."}] },
+          { "lessonId": "lesson9", "icon": "✅", "type": "lesson", "title": "Conditional Example", "content": [{"id": 12, "type": "code", "language": "java", "code": "int score = 85;\nif(score >= 90) {\n  System.out.println(\"Excellent\");\n} else {\n  System.out.println(\"Keep improving\");\n}"}] }
         ]
       }
     ],
@@ -192,8 +207,8 @@ const coursesData: Course[] = [
             "sectionId": "py_sec1",
             "title": "Python Fundamentals",
             "lessons": [
-                { "lessonId": "py_lesson1", "type": "lesson", "icon": "🐍", "title": "Intro to Python", "content": [{"type": "text", "content": "Python is a versatile language you can use for web development, data science, and more."}] },
-                { "lessonId": "py_lesson2", "type": "quiz", "icon": "🧠", "title": "Python Syntax", "content": [{ "type": "quiz", "question": "Which of these is a valid variable name in Python?", "options": ["my-var", "1var", "my_var", "$var"], "answerIndex": 2, "explanation": "Variable names in Python can only contain alpha-numeric characters and underscores, and cannot start with a number." }] }
+                { "lessonId": "py_lesson1", "type": "lesson", "icon": "🐍", "title": "Intro to Python", "content": [{"id": 13, "type": "text", "content": "Python is a versatile language you can use for web development, data science, and more."}] },
+                { "lessonId": "py_lesson2", "type": "quiz", "icon": "🧠", "title": "Python Syntax", "content": [{ "id": 14, "type": "quiz", "question": "Which of these is a valid variable name in Python?", "options": ["my-var", "1var", "my_var", "$var"], "answerIndex": 2, "explanation": "Variable names in Python can only contain alpha-numeric characters and underscores, and cannot start with a number." }] }
             ]
         }
     ],
@@ -225,8 +240,8 @@ export async function getLesson(courseId: string, lessonId: string): Promise<{ c
     const lesson = section.lessons.find(l => l.lessonId === lessonId);
     if (lesson) {
         // Ensure lesson content exists, even if empty
-        if (!lesson.content) {
-            lesson.content = [{ type: 'text', content: 'This lesson is under construction.' }];
+        if (!lesson.content || lesson.content.length === 0) {
+            lesson.content = [{ id: 999, type: 'text', content: 'This lesson is under construction.' }];
         }
         return JSON.parse(JSON.stringify({ course, lesson }));
     }
