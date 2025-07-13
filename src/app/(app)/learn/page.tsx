@@ -16,6 +16,7 @@ import { getCourses, Course, Lesson } from '@/lib/courses';
 import { ThreeDButton } from '@/components/ui/ThreeDButton';
 import { motion } from 'framer-motion';
 import { RadialProgress } from '@/components/ui/radial-progress';
+import { cn } from '@/lib/utils';
 
 const iconMap: Record<string, React.ElementType> = {
   BookOpen,
