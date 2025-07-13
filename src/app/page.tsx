@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BookOpenCheck } from "lucide-react";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Hero } from "@/components/Hero";
+import { WhatYoullLearn } from "@/components/WhatYoullLearn";
 
 export default function WelcomePage() {
   return (
@@ -25,6 +26,7 @@ export default function WelcomePage() {
       <Hero />
       <main>
         <HowItWorks />
+        <WhatYoullLearn />
       </main>
       <footer className="p-6 text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} SnapSkills. All rights reserved.
