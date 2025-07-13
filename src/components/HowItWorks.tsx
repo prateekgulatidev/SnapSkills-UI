@@ -9,25 +9,25 @@ const steps = [
     title: "Learn",
     icon: BookText,
     description: "Bite-sized interactive lessons that take just 5 minutes to complete",
-    color: "from-primary/70 to-primary",
+    color: "from-green-400 to-primary",
   },
   {
     title: "Quiz",
     icon: BrainCircuit,
     description: "Test your knowledge with quick quizzes and coding challenges",
-    color: "from-accent/70 to-accent",
+    color: "from-purple-400 to-accent",
   },
   {
     title: "Earn XP",
     icon: Star,
     description: "Gain experience points and level up your profile as you progress",
-    color: "from-yellow-400 to-yellow-600",
+    color: "from-yellow-400 to-yellow-500",
   },
   {
     title: "Unlock Projects",
     icon: Rocket,
     description: "Access real-world projects to apply your skills and build a portfolio",
-    color: "from-blue-400 to-blue-600",
+    color: "from-sky-400 to-blue-500",
   },
 ];
 
