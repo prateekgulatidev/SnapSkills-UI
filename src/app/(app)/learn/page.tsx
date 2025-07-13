@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { Progress } from "@/components/ui/progress";
-import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown } from "lucide-react";
+import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, CheckCircle, Notebook } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +15,7 @@ import {
 import { getCourses, Course, Lesson } from '@/lib/courses';
 import { ThreeDButton } from '@/components/ui/ThreeDButton';
 import { motion } from 'framer-motion';
+import { RadialProgress } from '@/components/ui/radial-progress';
 
 const iconMap: Record<string, React.ElementType> = {
   BookOpen,
@@ -111,80 +112,28 @@ export default function LearnPage() {
   const allLessonsInCourse = selectedCourse.sections.flatMap(s => s.lessons);
   const getLessonIndex = (lessonId: string) => allLessonsInCourse.findIndex(l => l.lessonId === lessonId);
 
-  const renderNode = (lesson: Lesson, sectionIndex: number, lessonIndexInSection: number) => {
-    const overallLessonIndex = getLessonIndex(lesson.lessonId);
-    
-    const isCompleted = completedLessons.includes(lesson.lessonId);
-    const isFirstLessonOfCourse = overallLessonIndex === 0;
-    
-    let isPreviousCompleted = false;
-    if (isFirstLessonOfCourse) {
-        isPreviousCompleted = true; // The very first lesson is always unlocked
-    } else {
-        const previousLesson = allLessonsInCourse[overallLessonIndex - 1];
-        if (previousLesson) {
-            isPreviousCompleted = completedLessons.includes(previousLesson.lessonId);
-        }
-    }
-    
-    const isUnlocked = isCompleted || isPreviousCompleted;
-
-    let variant: 'primary' | 'accent' | 'muted' = 'primary';
-    if (!isUnlocked) {
-      variant = 'muted';
-    } else if (lesson.type === 'quiz' || lesson.type === 'chest' || lesson.type === 'trophy') {
-      variant = 'accent';
-    }
-
-    const wrapperClasses = getNodeClasses(overallLessonIndex);
-    const labelClasses = `absolute -bottom-10 text-center font-bold text-sm ${isUnlocked ? 'text-foreground' : 'text-muted-foreground/50'}`;
-
-    const buttonContent = (
-      <div className={wrapperClasses}>
-        <motion.div
-          initial={{ scale: isUnlocked ? 1 : 0.8, opacity: isUnlocked ? 1 : 0.7 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: isUnlocked ? 0.1 : 0 }}
-        >
-          <ThreeDButton 
-            variant={variant}
-            state={isUnlocked ? 'active' : 'inactive'}
-            className="w-24 h-24 rounded-full"
-            disabled={!isUnlocked}
-          >
-            {getNodeIcon(lesson, isUnlocked)}
-          </ThreeDButton>
-        </motion.div>
-        <span className={labelClasses}>{lesson.title}</span>
-      </div>
-    );
-
-    if (isUnlocked) {
-      return (
-        <Link key={lesson.lessonId} href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`} className="w-full">
-           {buttonContent}
-        </Link>
-      )
-    }
-
-    return (
-      <div key={lesson.lessonId} className="w-full opacity-50 cursor-not-allowed">
-        {buttonContent}
-      </div>
-    )
+  const getSectionProgress = (sectionId: string) => {
+    const section = selectedCourse.sections.find(s => s.sectionId === sectionId);
+    if (!section) return 0;
+    const completedInSection = section.lessons.filter(l => completedLessons.includes(l.lessonId)).length;
+    return Math.round((completedInSection / section.lessons.length) * 100);
   }
 
-  const renderSectionHeader = (title: string) => (
-    <div className="flex items-center w-full my-12" key={title}>
-      <div className="flex-grow border-t-2 border-dashed border-border"></div>
-      <h2 className="mx-4 text-lg font-bold text-muted-foreground uppercase tracking-wider">{title}</h2>
-      <div className="flex-grow border-t-2 border-dashed border-border"></div>
-    </div>
-  );
+  const isLessonUnlocked = (lessonId: string) => {
+    const overallLessonIndex = getLessonIndex(lessonId);
+    if (overallLessonIndex === 0) return true;
+    
+    const isCompleted = completedLessons.includes(lessonId);
+    const previousLesson = allLessonsInCourse[overallLessonIndex - 1];
+    if (!previousLesson) return false;
+    
+    const isPreviousCompleted = completedLessons.includes(previousLesson.lessonId);
+    return isCompleted || isPreviousCompleted;
+  };
 
-  return (
-    <div className="flex flex-col h-full">
-      <header className="p-4 space-y-4 border-b sticky top-0 bg-background z-10 md:hidden">
+  const MobileView = () => (
+    <div className="md:hidden flex flex-col h-full">
+       <header className="p-4 space-y-4 border-b sticky top-0 bg-background z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
                 <div className="bg-accent/30 p-2 rounded-full">
@@ -218,40 +167,156 @@ export default function LearnPage() {
           </DropdownMenu>
       </header>
 
-      <main className="flex-grow overflow-y-auto p-4 md:p-8">
+      <main className="flex-grow overflow-y-auto p-4">
         <div className="max-w-2xl mx-auto w-full">
-            <div className="hidden md:flex items-center justify-between mb-8">
-                <h1 className="text-3xl font-bold">{selectedCourse.title}</h1>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="w-auto justify-between h-12">
-                            <div className="text-left">
-                                <p className="text-base font-bold">Switch Course</p>
-                            </div>
-                            <ChevronDown className="h-5 w-5 ml-2"/>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        {courses.map(course => (
-                            <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
-                                {course.title}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
             <div className="relative flex flex-col items-center">
                 {selectedCourse.sections.map((section, sectionIndex) => (
                     <React.Fragment key={section.sectionId}>
-                        {renderSectionHeader(section.title)}
-                        {section.lessons.map((lesson, lessonIndex) => (
-                            renderNode(lesson, sectionIndex, lessonIndex)
-                        ))}
+                        <div className="flex items-center w-full my-12" key={section.title}>
+                            <div className="flex-grow border-t-2 border-dashed border-border"></div>
+                            <h2 className="mx-4 text-lg font-bold text-muted-foreground uppercase tracking-wider">{section.title}</h2>
+                            <div className="flex-grow border-t-2 border-dashed border-border"></div>
+                        </div>
+                        {section.lessons.map((lesson, lessonIndex) => {
+                          const unlocked = isLessonUnlocked(lesson.lessonId);
+                          let variant: 'primary' | 'accent' | 'muted' = 'primary';
+                          if (!unlocked) {
+                            variant = 'muted';
+                          } else if (lesson.type === 'quiz' || lesson.type === 'chest' || lesson.type === 'trophy') {
+                            variant = 'accent';
+                          }
+
+                          const wrapperClasses = getNodeClasses(getLessonIndex(lesson.lessonId));
+                          const labelClasses = `absolute -bottom-10 text-center font-bold text-sm ${unlocked ? 'text-foreground' : 'text-muted-foreground/50'}`;
+                          const buttonContent = (
+                            <div className={wrapperClasses}>
+                              <motion.div
+                                initial={{ scale: unlocked ? 1 : 0.8, opacity: unlocked ? 1 : 0.7 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 20, delay: unlocked ? 0.1 : 0 }}
+                              >
+                                <ThreeDButton 
+                                  variant={variant}
+                                  state={unlocked ? 'active' : 'inactive'}
+                                  className="w-24 h-24 rounded-full"
+                                  disabled={!unlocked}
+                                >
+                                  {getNodeIcon(lesson, unlocked)}
+                                </ThreeDButton>
+                              </motion.div>
+                              <span className={labelClasses}>{lesson.title}</span>
+                            </div>
+                          );
+
+                          if (unlocked) {
+                            return (
+                              <Link key={lesson.lessonId} href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`} className="w-full">
+                                {buttonContent}
+                              </Link>
+                            )
+                          }
+
+                          return (
+                            <div key={lesson.lessonId} className="w-full opacity-50 cursor-not-allowed">
+                              {buttonContent}
+                            </div>
+                          )
+                        })}
                     </React.Fragment>
                 ))}
             </div>
         </div>
       </main>
     </div>
+  );
+
+  const DesktopView = () => {
+    const totalLessons = allLessonsInCourse.length;
+    const completedCount = completedLessons.length;
+    const overallProgress = totalLessons > 0 ? (completedCount / totalLessons) * 100 : 0;
+    
+    return (
+      <div className="hidden md:flex flex-col h-full bg-background dark:bg-card">
+        <header className="flex items-center justify-between p-4 border-b sticky top-0 bg-background/80 backdrop-blur-sm z-10">
+          <h1 className="text-xl font-bold">{selectedCourse.title}</h1>
+          <div className="flex items-center gap-4">
+             <div className="w-48">
+              <Progress value={overallProgress} className="h-2" />
+            </div>
+            <span className="text-sm font-medium text-muted-foreground">{completedCount} / {totalLessons}</span>
+          </div>
+        </header>
+        <main className="flex-grow overflow-y-auto">
+          <div className="max-w-4xl mx-auto p-8">
+            {selectedCourse.sections.map((section, index) => (
+              <div key={section.sectionId} className="mb-12">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <p className="text-sm font-semibold text-primary uppercase tracking-wider">Section {index + 1}</p>
+                    <h2 className="text-3xl font-bold mt-1">{section.title}</h2>
+                  </div>
+                  <div className="text-center">
+                      <RadialProgress value={getSectionProgress(section.sectionId)} />
+                      <p className="text-xs text-muted-foreground mt-2">Completed</p>
+                  </div>
+                </div>
+
+                <div className="border-t border-border pt-6">
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">Lessons</h3>
+                    <div className="space-y-2">
+                        {section.lessons.map((lesson, lessonIndex) => {
+                            const unlocked = isLessonUnlocked(lesson.lessonId);
+                            const isCompleted = completedLessons.includes(lesson.lessonId);
+
+                            const LessonRow = (
+                                <div
+                                    className={cn(
+                                        'flex items-center p-3 rounded-lg transition-colors',
+                                        unlocked ? 'hover:bg-muted' : 'opacity-60 cursor-not-allowed',
+                                        isCompleted && 'bg-primary/10 hover:bg-primary/20'
+                                    )}
+                                >
+                                    <span className={cn("text-2xl font-bold w-12", isCompleted ? 'text-primary' : 'text-muted-foreground' )}>
+                                        {String(lessonIndex + 1).padStart(2, '0')}
+                                    </span>
+                                    <p className="font-medium flex-grow">{lesson.title}</p>
+                                    {isCompleted ? (
+                                      <div className="flex items-center gap-2 text-green-600">
+                                        <CheckCircle className="h-5 w-5" />
+                                        <span className="text-sm font-semibold">Completed</span>
+                                      </div>
+                                    ) : (
+                                      <Button variant="outline" size="sm" disabled={!unlocked}>
+                                        {unlocked ? <Notebook className="mr-2 h-4 w-4"/> : <Lock className="mr-2 h-4 w-4"/>}
+                                        Learn
+                                      </Button>
+                                    )}
+                                </div>
+                            );
+                            
+                            if (unlocked) {
+                                return (
+                                    <Link key={lesson.lessonId} href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`}>
+                                        {LessonRow}
+                                    </Link>
+                                )
+                            }
+                            return <div key={lesson.lessonId}>{LessonRow}</div>
+                        })}
+                    </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </main>
+      </div>
+    )
+  };
+
+  return (
+    <>
+      <MobileView />
+      <DesktopView />
+    </>
   );
 }

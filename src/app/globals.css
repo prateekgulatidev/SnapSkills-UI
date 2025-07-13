@@ -181,4 +181,31 @@
   body {
     @apply bg-background text-foreground;
   }
+  .radial-progress {
+    --value: 0;
+    --size: 5rem;
+    --thickness: 0.5rem;
+    
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: hsl(var(--foreground));
+    position: relative;
+    background: conic-gradient(hsl(var(--primary)) calc(var(--value) * 1%), hsl(var(--muted)) 0);
+  }
+  .radial-progress::before {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    inset: 0;
+    background: hsl(var(--card));
+    inset: var(--thickness);
+  }
+  .radial-progress-value {
+    z-index: 1;
+  }
 }
