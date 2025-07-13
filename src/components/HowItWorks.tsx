@@ -33,7 +33,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="py-12 md:py-20 px-6 sm:px-12 bg-muted/50 dark:bg-muted/10">
+    <section className="h-full flex items-center justify-center py-12 md:py-20 px-6 sm:px-12 bg-muted/50 dark:bg-muted/10">
       <div className="max-w-6xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
           How SnapSkills Works

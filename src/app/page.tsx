@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,8 +9,8 @@ import { WhatYoullLearn } from "@/components/WhatYoullLearn";
 
 export default function WelcomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <header className="p-4 flex items-center justify-between">
+    <div className="h-screen w-full snap-y snap-mandatory overflow-y-scroll">
+      <header className="sticky top-0 z-50 p-4 flex items-center justify-between bg-background/80 backdrop-blur-sm">
         <Link href="/" className="flex items-center gap-2">
             <BookOpenCheck className="w-7 h-7 text-primary" />
             <span className="text-xl font-bold">SnapSkills</span>
@@ -23,14 +24,21 @@ export default function WelcomePage() {
             </Button>
         </div>
       </header>
-      <Hero />
-      <main>
-        <HowItWorks />
-        <WhatYoullLearn />
+
+      <main className="relative top-[-68px]">
+        <div className="h-screen w-full snap-start">
+          <Hero />
+        </div>
+        <div className="h-screen w-full snap-start">
+          <HowItWorks />
+        </div>
+        <div className="h-screen w-full snap-start">
+          <WhatYoullLearn />
+        </div>
+        <footer className="h-screen w-full snap-start flex items-center justify-center p-6 text-center text-sm text-muted-foreground bg-muted/50 dark:bg-muted/10">
+          © {new Date().getFullYear()} SnapSkills. All rights reserved.
+        </footer>
       </main>
-      <footer className="p-6 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} SnapSkills. All rights reserved.
-      </footer>
     </div>
   );
 }

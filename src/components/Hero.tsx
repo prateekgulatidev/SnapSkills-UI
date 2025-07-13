@@ -5,7 +5,7 @@ import { LaptopIcon, GraphIcon, CodeSnippetIcon, XpBadgeIcon, ServerStackIcon } 
 
 export const Hero = () => {
   return (
-    <section className="relative bg-background py-24 px-6 sm:px-12 text-center overflow-hidden">
+    <section className="relative bg-background h-full flex items-center justify-center px-6 sm:px-12 text-center overflow-hidden">
       <div className="max-w-5xl mx-auto z-10 relative">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-foreground">
           <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-accent">
