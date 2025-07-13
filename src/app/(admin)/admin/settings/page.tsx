@@ -18,11 +18,15 @@ export default function AdminSettingsPage() {
     React.useEffect(() => {
         const storedTheme = localStorage.getItem('theme-color') || 'theme-default';
         setTheme(storedTheme);
-        document.documentElement.className = '';
-        document.documentElement.classList.add(storedTheme);
-        // Re-apply dark mode if it was active
-        if (localStorage.getItem('theme-mode') === 'dark') {
+        
+        // Initial theme setup
+        const isDark = document.documentElement.classList.contains('dark');
+        document.documentElement.className = ''; // Clear all classes
+        if (isDark) {
           document.documentElement.classList.add('dark');
+        }
+        if (storedTheme !== 'theme-default') {
+          document.documentElement.classList.add(storedTheme);
         }
     }, []);
 
@@ -30,11 +34,9 @@ export default function AdminSettingsPage() {
         setTheme(newTheme);
         localStorage.setItem('theme-color', newTheme);
         
-        const isDark = document.documentElement.classList.contains('dark');
-        document.documentElement.className = ''; // Clear all classes
-        if (isDark) {
-          document.documentElement.classList.add('dark');
-        }
+        const themeClasses = ['theme-default', 'theme-growth', 'theme-focus', 'theme-momentum'];
+        document.documentElement.classList.remove(...themeClasses);
+
         if (newTheme !== 'theme-default') {
           document.documentElement.classList.add(newTheme);
         }

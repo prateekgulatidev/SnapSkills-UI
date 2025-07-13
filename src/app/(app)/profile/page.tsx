@@ -34,10 +34,12 @@ export default function ProfilePage() {
     // Handle color theme
     const storedTheme = localStorage.getItem('theme-color') || 'theme-default';
     setTheme(storedTheme);
-    document.documentElement.className = '';
-    document.documentElement.classList.add(storedTheme);
+    // Apply initial theme classes
     if (storedThemeMode === 'dark') {
       document.documentElement.classList.add('dark');
+    }
+    if (storedTheme !== 'theme-default') {
+      document.documentElement.classList.add(storedTheme);
     }
 
   }, []);
@@ -52,11 +54,11 @@ export default function ProfilePage() {
     setTheme(newTheme);
     localStorage.setItem('theme-color', newTheme);
     
-    const isDark = document.documentElement.classList.contains('dark');
-    document.documentElement.className = ''; // Clear all classes
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-    }
+    // Clear all theme-related classes first
+    const themeClasses = ['theme-default', 'theme-growth', 'theme-focus', 'theme-momentum'];
+    document.documentElement.classList.remove(...themeClasses);
+
+    // Add the new theme class if it's not the default
     if (newTheme !== 'theme-default') {
       document.documentElement.classList.add(newTheme);
     }
