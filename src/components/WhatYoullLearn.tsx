@@ -40,7 +40,7 @@ const learningPaths = [
 
 export function WhatYoullLearn() {
   return (
-    <section className="h-full flex items-center justify-center py-12 md:py-20 px-6 sm:px-12 bg-background">
+    <section className="bg-background py-12 md:py-20 px-6 sm:px-12">
       <div className="max-w-6xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
           What You'll Learn
