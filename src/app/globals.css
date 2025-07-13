@@ -46,6 +46,132 @@
     --input: 0 0% 20%;
     --ring: 149 94% 43%;
   }
+  .theme-growth {
+    --background: 210 40% 98%; /* #F8FAFC - Snow */
+    --foreground: 212 19% 19%; /* #242f3a - Ebony Clay */
+    --card: 210 40% 100%;
+    --card-foreground: 212 19% 19%;
+    --popover: 210 40% 100%;
+    --popover-foreground: 212 19% 19%;
+    --primary: 82 90% 45%; /* #7ac70c - Pistachio Green */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 16% 93%;
+    --secondary-foreground: 212 19% 19%;
+    --muted: 210 16% 93%;
+    --muted-foreground: 212 19% 45%;
+    --accent: 82 90% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 67% 51%; /* #D33131 */
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 82 90% 45%;
+  }
+  .dark.theme-growth {
+    --background: 212 19% 19%; /* #242f3a - Ebony Clay */
+    --foreground: 210 40% 98%; /* #F8FAFC - Snow */
+    --card: 212 19% 22%;
+    --card-foreground: 210 40% 98%;
+    --popover: 212 19% 22%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 82 90% 45%; /* #7ac70c - Pistachio Green */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 212 19% 25%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 212 19% 25%;
+    --muted-foreground: 210 40% 70%;
+    --accent: 82 90% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 67% 51%; /* #D33131 */
+    --destructive-foreground: 0 0% 98%;
+    --border: 212 19% 30%;
+    --input: 212 19% 30%;
+    --ring: 82 90% 45%;
+  }
+  .theme-focus {
+    --background: 0 0% 100%; /* #FFFFFF - Pure White */
+    --foreground: 222 47% 11%; /* #111827 - Matte Black */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 26 95% 58%; /* #F97316 - Fiery Orange */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 13% 91%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 13% 91%;
+    --muted-foreground: 222 47% 45%;
+    --accent: 26 95% 58%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 14% 96%;
+    --input: 220 14% 96%;
+    --ring: 26 95% 58%;
+  }
+  .dark.theme-focus {
+    --background: 222 47% 11%; /* #111827 - Matte Black */
+    --foreground: 0 0% 100%; /* #FFFFFF - Pure White */
+    --card: 222 47% 13%;
+    --card-foreground: 0 0% 100%;
+    --popover: 222 47% 13%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 26 95% 58%; /* #F97316 - Fiery Orange */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 47% 18%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 222 47% 18%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 26 95% 58%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 222 47% 20%;
+    --input: 222 47% 20%;
+    --ring: 26 95% 58%;
+  }
+  .theme-momentum {
+    --background: 48 93% 95%; /* #FEFCE8 - Creamy White */
+    --foreground: 220 5% 24%; /* #3A3D41 - Driftwood */
+    --card: 48 93% 97%;
+    --card-foreground: 220 5% 24%;
+    --popover: 48 93% 97%;
+    --popover-foreground: 220 5% 24%;
+    --primary: 266 91% 68%; /* #A855F7 - Neon Purple */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 5% 90%;
+    --secondary-foreground: 220 5% 24%;
+    --muted: 220 5% 90%;
+    --muted-foreground: 220 5% 50%;
+    --accent: 266 91% 68%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 5% 85%;
+    --input: 220 5% 85%;
+    --ring: 266 91% 68%;
+  }
+  .dark.theme-momentum {
+    --background: 220 5% 24%; /* #3A3D41 - Driftwood */
+    --foreground: 48 93% 95%; /* #FEFCE8 - Creamy White */
+    --card: 220 5% 26%;
+    --card-foreground: 48 93% 95%;
+    --popover: 220 5% 26%;
+    --popover-foreground: 48 93% 95%;
+    --primary: 266 91% 68%; /* #A855F7 - Neon Purple */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 5% 30%;
+    --secondary-foreground: 48 93% 95%;
+    --muted: 220 5% 30%;
+    --muted-foreground: 48 93% 80%;
+    --accent: 266 91% 68%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 5% 35%;
+    --input: 220 5% 35%;
+    --ring: 266 91% 68%;
+  }
 }
 
 @layer base {
@@ -53,6 +179,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-gray-100 dark:bg-gray-900 text-foreground;
+    @apply bg-background text-foreground;
   }
 }

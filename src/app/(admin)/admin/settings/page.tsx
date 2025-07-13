@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -7,12 +6,39 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { ToggleLeft, Server } from 'lucide-react';
+import { ToggleLeft, Server, Palette } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function AdminSettingsPage() {
     const [isQuizzesEnabled, setIsQuizzesEnabled] = React.useState(true);
     const [isLeaderboardEnabled, setIsLeaderboardEnabled] = React.useState(false);
     const [useCDN, setUseCDN] = React.useState(false);
+    const [theme, setTheme] = React.useState('theme-default');
+
+    React.useEffect(() => {
+        const storedTheme = localStorage.getItem('theme-color') || 'theme-default';
+        setTheme(storedTheme);
+        document.documentElement.className = '';
+        document.documentElement.classList.add(storedTheme);
+        // Re-apply dark mode if it was active
+        if (localStorage.getItem('theme-mode') === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+    }, []);
+
+    const handleThemeChange = (newTheme: string) => {
+        setTheme(newTheme);
+        localStorage.setItem('theme-color', newTheme);
+        
+        const isDark = document.documentElement.classList.contains('dark');
+        document.documentElement.className = ''; // Clear all classes
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        }
+        if (newTheme !== 'theme-default') {
+          document.documentElement.classList.add(newTheme);
+        }
+    };
 
     return (
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -77,6 +103,32 @@ export default function AdminSettingsPage() {
                                 <Input id="cdn-path" placeholder="https://cdn.example.com/assets" className="max-w-md" disabled={!useCDN}/>
                                 <Button disabled={!useCDN}>Update Path</Button>
                             </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                         <div className="flex items-center gap-3">
+                            <Palette className="h-6 w-6" />
+                            <CardTitle>Theme Settings</CardTitle>
+                        </div>
+                        <CardDescription>Set the global color theme for the application.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="theme-select" className="font-medium">Application Theme</Label>
+                            <Select value={theme} onValueChange={handleThemeChange}>
+                                <SelectTrigger className="w-[280px]">
+                                    <SelectValue placeholder="Select a theme" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="theme-default">Default</SelectItem>
+                                    <SelectItem value="theme-growth">Growth</SelectItem>
+                                    <SelectItem value="theme-focus">Focus</SelectItem>
+                                    <SelectItem value="theme-momentum">Momentum</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                     </CardContent>
                 </Card>

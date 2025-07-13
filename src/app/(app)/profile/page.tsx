@@ -3,11 +3,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Flame, CheckCircle, Edit, LogOut, Moon, Sun } from "lucide-react";
+import { Flame, CheckCircle, Edit, LogOut, Moon, Sun, Palette } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 const completedCourses = [
   { id: 1, title: 'HTML & CSS Basics' },
@@ -16,22 +18,48 @@ const completedCourses = [
 
 export default function ProfilePage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [theme, setTheme] = useState('theme-default');
 
   useEffect(() => {
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    // Handle dark mode
+    const storedThemeMode = localStorage.getItem('theme-mode');
+    if (storedThemeMode === 'dark' || (!storedThemeMode && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
       setIsDarkMode(true);
     } else {
       document.documentElement.classList.remove('dark');
       setIsDarkMode(false);
     }
+    
+    // Handle color theme
+    const storedTheme = localStorage.getItem('theme-color') || 'theme-default';
+    setTheme(storedTheme);
+    document.documentElement.className = '';
+    document.documentElement.classList.add(storedTheme);
+    if (storedThemeMode === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+
   }, []);
 
-  const toggleTheme = () => {
+  const toggleThemeMode = () => {
     const isDark = document.documentElement.classList.toggle('dark');
     setIsDarkMode(isDark);
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('theme-mode', isDark ? 'dark' : 'light');
+  };
+
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem('theme-color', newTheme);
+    
+    const isDark = document.documentElement.classList.contains('dark');
+    document.documentElement.className = ''; // Clear all classes
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+    if (newTheme !== 'theme-default') {
+      document.documentElement.classList.add(newTheme);
+    }
   };
   
   return (
@@ -87,7 +115,28 @@ export default function ProfilePage() {
               {isDarkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
               <span>Dark Mode</span>
             </Label>
-            <Switch id="dark-mode-toggle" checked={isDarkMode} onCheckedChange={toggleTheme} />
+            <Switch id="dark-mode-toggle" checked={isDarkMode} onCheckedChange={toggleThemeMode} />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+             <div className="flex items-center justify-between">
+                <Label htmlFor="theme-select" className="flex items-center gap-2">
+                  <Palette className="w-4 h-4" />
+                  <span>Color Theme</span>
+                </Label>
+                 <Select value={theme} onValueChange={handleThemeChange}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select a theme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="theme-default">Default</SelectItem>
+                        <SelectItem value="theme-growth">Growth</SelectItem>
+                        <SelectItem value="theme-focus">Focus</SelectItem>
+                        <SelectItem value="theme-momentum">Momentum</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
           </CardContent>
         </Card>
         <Button variant="destructive" className="w-full justify-start gap-2" asChild>
