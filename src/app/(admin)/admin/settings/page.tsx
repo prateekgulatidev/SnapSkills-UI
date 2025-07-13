@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -14,14 +15,15 @@ export default function AdminSettingsPage() {
     const [isLeaderboardEnabled, setIsLeaderboardEnabled] = React.useState(false);
     const [useCDN, setUseCDN] = React.useState(false);
     const [theme, setTheme] = React.useState('theme-default');
+    const [isMounted, setIsMounted] = React.useState(false);
 
     React.useEffect(() => {
+        setIsMounted(true);
         const storedTheme = localStorage.getItem('theme-color') || 'theme-default';
         setTheme(storedTheme);
         
-        // Initial theme setup
         const isDark = document.documentElement.classList.contains('dark');
-        document.documentElement.className = ''; // Clear all classes
+        document.documentElement.className = '';
         if (isDark) {
           document.documentElement.classList.add('dark');
         }
@@ -34,13 +36,21 @@ export default function AdminSettingsPage() {
         setTheme(newTheme);
         localStorage.setItem('theme-color', newTheme);
         
+        const isDark = document.documentElement.classList.contains('dark');
+        
         const themeClasses = ['theme-default', 'theme-growth', 'theme-focus', 'theme-momentum'];
         document.documentElement.classList.remove(...themeClasses);
+
+        if(isDark) document.documentElement.classList.add('dark');
 
         if (newTheme !== 'theme-default') {
           document.documentElement.classList.add(newTheme);
         }
     };
+
+    if (!isMounted) {
+      return null;
+    }
 
     return (
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">

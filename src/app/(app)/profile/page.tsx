@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -19,29 +20,30 @@ const completedCourses = [
 export default function ProfilePage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [theme, setTheme] = useState('theme-default');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Handle dark mode
+    setIsMounted(true);
     const storedThemeMode = localStorage.getItem('theme-mode');
-    if (storedThemeMode === 'dark' || (!storedThemeMode && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    const storedTheme = localStorage.getItem('theme-color') || 'theme-default';
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const darkMode = storedThemeMode === 'dark' || (!storedThemeMode && prefersDark);
+    
+    setIsDarkMode(darkMode);
+    setTheme(storedTheme);
+
+    if (darkMode) {
       document.documentElement.classList.add('dark');
-      setIsDarkMode(true);
     } else {
       document.documentElement.classList.remove('dark');
-      setIsDarkMode(false);
     }
-    
-    // Handle color theme
-    const storedTheme = localStorage.getItem('theme-color') || 'theme-default';
-    setTheme(storedTheme);
-    // Apply initial theme classes
-    if (storedThemeMode === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
+
+    const themeClasses = ['theme-default', 'theme-growth', 'theme-focus', 'theme-momentum'];
+    document.documentElement.classList.remove(...themeClasses);
     if (storedTheme !== 'theme-default') {
       document.documentElement.classList.add(storedTheme);
     }
-
   }, []);
 
   const toggleThemeMode = () => {
@@ -54,9 +56,14 @@ export default function ProfilePage() {
     setTheme(newTheme);
     localStorage.setItem('theme-color', newTheme);
     
+    const isDark = document.documentElement.classList.contains('dark');
+    
     // Clear all theme-related classes first
     const themeClasses = ['theme-default', 'theme-growth', 'theme-focus', 'theme-momentum'];
     document.documentElement.classList.remove(...themeClasses);
+    
+    // re-add dark if it was there
+    if(isDark) document.documentElement.classList.add('dark');
 
     // Add the new theme class if it's not the default
     if (newTheme !== 'theme-default') {
@@ -64,6 +71,10 @@ export default function ProfilePage() {
     }
   };
   
+  if (!isMounted) {
+    return null; // or a loading skeleton
+  }
+
   return (
     <div className="p-4 space-y-6 pb-20">
       <header className="flex items-center gap-4">
