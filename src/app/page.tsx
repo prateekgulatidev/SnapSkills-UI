@@ -3,15 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookOpenCheck } from "lucide-react";
 import { HowItWorks } from "@/components/HowItWorks";
+import { Hero } from "@/components/Hero";
 
 export default function WelcomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <header className="p-4 flex justify-start items-center">
-        <BookOpenCheck className="h-8 w-8 text-primary" />
-        <h1 className="ml-2 text-2xl font-bold text-primary">SnapSkills</h1>
-      </header>
-      <main className="flex-grow">
+      <Hero />
+      <main>
         <div className="flex flex-col items-center justify-center p-6 text-center">
             <Image
             src="https://placehold.co/400x300.png"
