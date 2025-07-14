@@ -7,9 +7,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
-import { auth } from '@/lib/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useToast } from '@/hooks/use-toast';
 
 function GoogleIcon() {
   return (
@@ -24,26 +21,10 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
-  const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      toast({
-        title: "Login Successful!",
-        description: "Welcome back!",
-        variant: "default",
-      });
-      router.push('/learn');
-    } catch (error: any) {
-      console.error('Login Error:', error);
-      toast({
-        title: "Login Failed",
-        description: error.message || "Invalid credentials. Please try again.",
-        variant: "destructive",
-      });
-    }
+    router.push('/learn');
   };
 
   return (
