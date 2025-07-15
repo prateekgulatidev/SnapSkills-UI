@@ -79,7 +79,11 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                             {navItems.map((item) => (
                                 <SidebarItem key={item.href} {...item} />
                             ))}
-                            <SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarContent>
+                    <SidebarFooter>
+                         <SidebarMenu>
+                             <SidebarMenuItem>
                                 <SidebarMenuButton asChild tooltip={{children: 'Profile'}}>
                                     <Link href="/profile">
                                         <User />
@@ -87,26 +91,22 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild tooltip={{children: 'More'}}>
+                                    <Link href="#">
+                                        <MoreHorizontal />
+                                        {open && <span>More</span>}
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                         </SidebarMenu>
-                    </SidebarContent>
-                    <SidebarFooter>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild tooltip={{children: 'More'}}>
-                                <Link href="#">
-                                    <MoreHorizontal />
-                                    {open && <span>More</span>}
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
                     </SidebarFooter>
                 </Sidebar>
             </div>
             <div className="flex-1 flex flex-col min-w-0">
                 <main className="flex-1 min-w-0">{children}</main>
-                <div className="md:hidden">
-                    <BottomNav />
-                </div>
             </div>
+            <BottomNav />
         </div>
     );
 }
