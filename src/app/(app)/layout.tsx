@@ -67,47 +67,45 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex flex-col md:flex-row min-h-screen bg-muted/40 w-full">
             <div className="hidden md:block">
-            <Sidebar>
-                <SidebarHeader>
-                    <Link href="/" className="flex items-center gap-2">
-                    <BookOpenCheck className="w-7 h-7 text-primary" />
-                    {open && <span className="text-xl font-bold">SnapSkills</span>}
-                </Link>
-                </SidebarHeader>
-                <SidebarContent>
-                <SidebarMenu>
-                    {navItems.map((item) => (
-                    <SidebarItem key={item.href} {...item} />
-                    ))}
-                    <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={{children: 'Profile'}}>
-                        <Link href="/profile">
-                            <User />
-                            {open && <span>Profile</span>}
+                <Sidebar>
+                    <SidebarHeader>
+                        <Link href="/" className="flex items-center gap-2">
+                            <BookOpenCheck className="w-7 h-7 text-primary" />
+                            {open && <span className="text-xl font-bold">SnapSkills</span>}
                         </Link>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-                </SidebarContent>
-                <SidebarFooter>
-                    <SidebarMenu>
+                    </SidebarHeader>
+                    <SidebarContent>
+                        <SidebarMenu>
+                            {navItems.map((item) => (
+                                <SidebarItem key={item.href} {...item} />
+                            ))}
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild tooltip={{children: 'Profile'}}>
+                                    <Link href="/profile">
+                                        <User />
+                                        {open && <span>Profile</span>}
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarContent>
+                    <SidebarFooter>
                         <SidebarMenuItem>
-                        <SidebarMenuButton asChild tooltip={{children: 'More'}}>
-                            <Link href="#">
-                                <MoreHorizontal />
-                                {open && <span>More</span>}
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    </SidebarMenu>
-                </SidebarFooter>
-            </Sidebar>
+                            <SidebarMenuButton asChild tooltip={{children: 'More'}}>
+                                <Link href="#">
+                                    <MoreHorizontal />
+                                    {open && <span>More</span>}
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarFooter>
+                </Sidebar>
             </div>
-            <div className="flex-1 flex min-w-0">
-            <main className="flex-1 min-w-0">{children}</main>
-            </div>
-            <div className="md:hidden">
-                <BottomNav />
+            <div className="flex-1 flex flex-col min-w-0">
+                <main className="flex-1 min-w-0">{children}</main>
+                <div className="md:hidden">
+                    <BottomNav />
+                </div>
             </div>
         </div>
     );
