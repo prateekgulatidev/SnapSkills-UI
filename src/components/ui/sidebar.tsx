@@ -218,7 +218,7 @@ const Sidebar = React.forwardRef<
             ref={ref}
             className={cn(
             'group peer hidden md:block border-r bg-muted/40 transition-all duration-300 ease-in-out',
-            open ? 'w-[280px]' : 'w-[70px]',
+            open ? 'w-[220px] lg:w-[280px]' : 'w-[70px] lg:w-[80px]',
             className
             )}
             {...props}
