@@ -17,7 +17,8 @@ import { getCourses, Course, Lesson } from '@/lib/courses';
 import { ThreeDButton } from '@/components/ui/ThreeDButton';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { RadialProgress } from '@/components/ui/radial-progress';
 
 const iconMap: Record<string, React.ElementType> = {
   BookOpen,
@@ -113,6 +114,11 @@ export default function LearnPage() {
 
   const allLessonsInCourse = selectedCourse.sections.flatMap(s => s.lessons);
   const getLessonIndex = (lessonId: string) => allLessonsInCourse.findIndex(l => l.lessonId === lessonId);
+  
+  const completedCount = allLessonsInCourse.filter(l => completedLessons.includes(l.lessonId)).length;
+  const totalLessons = allLessonsInCourse.length;
+  const courseProgress = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+
 
   const isLessonUnlocked = (lessonId: string) => {
     const overallLessonIndex = getLessonIndex(lessonId);
@@ -283,28 +289,92 @@ export default function LearnPage() {
   const DesktopView = () => {
     return (
       <div className="hidden md:flex flex-row h-full">
-        <main className="flex-grow overflow-y-auto p-8">
-            <header className="mb-8">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-full max-w-sm justify-between h-14 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
-                        <div className="text-left">
-                            <p className="text-sm text-muted-foreground">Current Course</p>
-                            <p className="text-lg font-bold">{selectedCourse.title}</p>
-                        </div>
-                        <ChevronDown className="h-6 w-6"/>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[384px]">
-                    {courses.map(course => (
-                        <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
-                            {course.title}
-                        </DropdownMenuItem>
-                    ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+        <main className="flex-1 overflow-y-auto p-8 min-w-0">
+            <header className="mb-8 flex items-center justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold">{selectedCourse.title}</h1>
+                    <p className="text-muted-foreground">{selectedCourse.description}</p>
+                </div>
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="justify-between h-12 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
+                           Switch Course
+                            <ChevronDown className="h-4 w-4 ml-2"/>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-[300px]">
+                        {courses.map(course => (
+                            <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
+                                {course.title}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </header>
-            <LearningPath />
+            
+            <Card className="mb-8">
+                <CardContent className="p-6 flex items-center justify-between">
+                    <div>
+                        <CardTitle>Course Progress</CardTitle>
+                        <CardDescription>{completedCount} of {totalLessons} lessons completed</CardDescription>
+                    </div>
+                    <RadialProgress value={courseProgress} />
+                </CardContent>
+            </Card>
+
+            <div className="space-y-6">
+                {selectedCourse.sections.map(section => (
+                    <div key={section.sectionId}>
+                        <h2 className="text-xl font-bold mb-3">{section.title}</h2>
+                        <div className="space-y-2">
+                           {section.lessons.map((lesson, index) => {
+                               const unlocked = isLessonUnlocked(lesson.lessonId);
+                               const isCompleted = completedLessons.includes(lesson.lessonId);
+                               const LessonRow = (
+                                    <div
+                                        className={cn(
+                                            'flex items-center p-3 rounded-lg transition-colors',
+                                            unlocked ? 'hover:bg-muted' : 'opacity-60 cursor-not-allowed',
+                                            isCompleted && 'bg-primary/10 hover:bg-primary/20'
+                                        )}
+                                    >
+                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted-foreground/10 mr-4 text-muted-foreground font-bold">
+                                            {index + 1}
+                                        </div>
+                                        <div className="flex-grow">
+                                            <p className="font-medium">{lesson.title}</p>
+                                        </div>
+                                        {unlocked ? (
+                                            <Button variant={isCompleted ? "ghost" : "default"}>
+                                                {isCompleted ? <CheckCircle className="mr-2"/> : null}
+                                                {isCompleted ? "Completed" : "Learn"}
+                                            </Button>
+                                        ) : (
+                                            <Button variant="ghost" disabled>
+                                                <Lock className="mr-2" />
+                                                Locked
+                                            </Button>
+                                        )}
+                                    </div>
+                                );
+                               
+                               if (unlocked) {
+                                   return (
+                                       <Link href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`} key={lesson.lessonId}>
+                                           {LessonRow}
+                                       </Link>
+                                   )
+                               }
+                               return (
+                                   <div key={lesson.lessonId}>
+                                        {LessonRow}
+                                   </div>
+                               )
+                           })}
+                        </div>
+                    </div>
+                ))}
+            </div>
         </main>
         <RightSidebar />
       </div>

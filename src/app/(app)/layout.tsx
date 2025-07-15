@@ -113,7 +113,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </SidebarFooter>
             </Sidebar>
           </div>
-          <div className="flex-grow overflow-y-auto w-full">{children}</div>
+          <div className="flex-1 flex-grow overflow-y-auto min-w-0">{children}</div>
           <div className="md:hidden">
             <BottomNav />
           </div>
