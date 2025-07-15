@@ -542,7 +542,9 @@ const SidebarMenuButton = React.forwardRef<
             className={cn(sidebarMenuButtonVariants({ variant, size }), !open && "justify-center", className)}
             {...props}
         >
-            {children}
+            <div className="flex w-full items-center gap-3">
+              {children}
+            </div>
             {open ? null : <span className="sr-only">{(tooltip as any)?.children || ''}</span>}
         </Comp>
     );
