@@ -83,7 +83,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   <SidebarMenuButton asChild tooltip={{children: 'Profile'}}>
                       <Link href="/profile">
                           <User />
-                          <span>Profile</span>
+                           <span className="sr-only">Profile</span>
                       </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -95,7 +95,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                       <SidebarMenuButton asChild tooltip={{children: 'Settings'}}>
                           <Link href="#">
                               <Settings />
-                              <span>Settings</span>
+                              <span className="sr-only">Settings</span>
                           </Link>
                       </SidebarMenuButton>
                   </SidebarMenuItem>
