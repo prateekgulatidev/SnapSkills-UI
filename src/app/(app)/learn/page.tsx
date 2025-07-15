@@ -249,12 +249,14 @@ export default function LearnPage() {
     <div className="hidden md:flex h-full w-full">
         <main className="flex-grow p-4 min-w-0 flex-1">
             <header className="py-4 flex items-center gap-4">
-                 {getCourseIcon(selectedCourse)}
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="w-full justify-between h-14 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
-                            <div className="text-left">
-                                <p className="text-lg font-bold">{selectedCourse.title}</p>
+                            <div className="flex items-center gap-3">
+                                {getCourseIcon(selectedCourse)}
+                                <div className="text-left">
+                                    <p className="text-lg font-bold">{selectedCourse.title}</p>
+                                </div>
                             </div>
                             <ChevronDown className="h-6 w-6"/>
                         </Button>
@@ -326,8 +328,8 @@ export default function LearnPage() {
             </div>
         </main>
         <aside className="hidden md:block w-[350px] p-6 space-y-6 border-l shrink-0">
-            <div className="flex items-center justify-around">
-                <div className="flex flex-col items-center gap-1 text-orange-500 font-bold">
+             <div className="flex items-center justify-around">
+                 <div className="flex flex-col items-center gap-1 text-orange-500 font-bold">
                     <Flame className="w-6 h-6" />
                     <span>5</span>
                     <span className="text-xs font-medium text-muted-foreground">Streak</span>
@@ -349,7 +351,7 @@ export default function LearnPage() {
                          <Crown className="w-6 h-6 text-yellow-300" />
                         <CardTitle className="text-2xl">Go Premium!</CardTitle>
                     </div>
-                </CardHeader>
+                </Header>
                 <CardContent>
                     <p className="mb-4">Unlock exclusive content, remove ads, and master skills faster.</p>
                     <Button variant="secondary" className="w-full text-blue-600 font-bold">Try for Free</Button>
