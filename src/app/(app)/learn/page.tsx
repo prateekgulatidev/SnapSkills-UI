@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { Progress } from "@/components/ui/progress";
-import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, Crown, Play, MessageSquare, Type, ToggleRight, Combine } from "lucide-react";
+import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, Crown, Play, MessageSquare, Type, ToggleRight, Combine, Battery } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,6 +39,7 @@ const iconMap: Record<string, React.ElementType> = {
   Type,
   ToggleRight,
   Combine,
+  Battery
 };
 
 
@@ -58,6 +59,19 @@ const getNodeIcon = (lesson: Lesson, unlocked: boolean) => {
     
     return <BookOpen className={commonClasses} />;
 }
+
+const getCourseIcon = (course: Course | null) => {
+    if (!course || !course.sections?.[0]?.lessons?.[0]?.icon) {
+        return <BookOpen className="w-8 h-8 text-primary" />;
+    }
+    const iconName = course.sections[0].lessons[0].icon;
+    const IconComponent = iconMap[iconName];
+    if (IconComponent) {
+        return <IconComponent className="w-8 h-8 text-primary" />;
+    }
+    return <BookOpen className="w-8 h-8 text-primary" />;
+};
+
 
 const getNodeClasses = (index: number) => {
     let positionClass = '';
@@ -234,7 +248,8 @@ export default function LearnPage() {
   const DesktopView = () => (
     <div className="hidden md:flex h-full w-full">
         <main className="flex-grow p-4 min-w-0 flex-1">
-            <header className="py-4">
+            <header className="py-4 flex items-center gap-4">
+                 {getCourseIcon(selectedCourse)}
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="w-full justify-between h-14 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
@@ -312,13 +327,20 @@ export default function LearnPage() {
         </main>
         <aside className="hidden md:block w-[350px] p-6 space-y-6 border-l shrink-0">
             <div className="flex items-center justify-around">
-                <div className="flex items-center gap-2 text-orange-500 font-bold">
+                <div className="flex flex-col items-center gap-1 text-orange-500 font-bold">
                     <Flame className="w-6 h-6" />
                     <span>5</span>
+                    <span className="text-xs font-medium text-muted-foreground">Streak</span>
                 </div>
-                <div className="flex items-center gap-2 text-yellow-500 font-bold">
+                 <div className="flex flex-col items-center gap-1 text-green-500 font-bold">
+                    <Battery className="w-6 h-6" />
+                    <span>100%</span>
+                    <span className="text-xs font-medium text-muted-foreground">Charge</span>
+                </div>
+                <div className="flex flex-col items-center gap-1 text-yellow-500 font-bold">
                     <Zap className="w-6 h-6 fill-yellow-400" />
-                    <span>120 XP</span>
+                    <span>120</span>
+                    <span className="text-xs font-medium text-muted-foreground">XP</span>
                 </div>
             </div>
             <Card className="bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg">
