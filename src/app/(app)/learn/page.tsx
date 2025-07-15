@@ -252,11 +252,8 @@ export default function LearnPage() {
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="w-full justify-between h-14 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
-                            <div className="flex items-center gap-3">
-                                {getCourseIcon(selectedCourse)}
-                                <div className="text-left">
-                                    <p className="text-lg font-bold">{selectedCourse.title}</p>
-                                </div>
+                            <div className="text-left">
+                                <p className="text-lg font-bold">{selectedCourse.title}</p>
                             </div>
                             <ChevronDown className="h-6 w-6"/>
                         </Button>
@@ -333,11 +330,6 @@ export default function LearnPage() {
                     <Flame className="w-6 h-6" />
                     <span>5</span>
                     <span className="text-xs font-medium text-muted-foreground">Streak</span>
-                </div>
-                 <div className="flex flex-col items-center gap-1 text-green-500 font-bold">
-                    <Battery className="w-6 h-6" />
-                    <span>100%</span>
-                    <span className="text-xs font-medium text-muted-foreground">Charge</span>
                 </div>
                 <div className="flex flex-col items-center gap-1 text-yellow-500 font-bold">
                     <Zap className="w-6 h-6 fill-yellow-400" />
