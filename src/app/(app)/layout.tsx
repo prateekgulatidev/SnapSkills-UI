@@ -12,7 +12,7 @@ import {
   FileQuestion,
   User,
   BookOpenCheck,
-  Settings,
+  MoreHorizontal,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -92,10 +92,10 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
                 <SidebarFooter>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                        <SidebarMenuButton asChild tooltip={{children: 'Settings'}}>
+                        <SidebarMenuButton asChild tooltip={{children: 'More'}}>
                             <Link href="#">
-                                <Settings />
-                                {open && <span>Settings</span>}
+                                <MoreHorizontal />
+                                {open && <span>More</span>}
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
