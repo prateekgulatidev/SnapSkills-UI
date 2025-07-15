@@ -543,7 +543,6 @@ const SidebarMenuButton = React.forwardRef<
         {...props}
       >
         {children}
-        {!open && <span className="sr-only">{(tooltip as any)?.children || ''}</span>}
       </Comp>
     );
 

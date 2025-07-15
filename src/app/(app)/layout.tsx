@@ -32,6 +32,7 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarFooter,
+  useSidebar,
 } from '@/components/ui/sidebar';
 
 const navItems = [
@@ -51,6 +52,7 @@ const SidebarItem = ({
   label: string;
 }) => {
   const pathname = usePathname();
+  const { open } = useSidebar();
   const isActive = pathname.startsWith(href);
 
   return (
@@ -62,7 +64,7 @@ const SidebarItem = ({
       >
         <Link href={href}>
           <Icon />
-          <span>{label}</span>
+          {open ? <span>{label}</span> : <span className="sr-only">{label}</span>}
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
