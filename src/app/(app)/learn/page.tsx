@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import { Progress } from "@/components/ui/progress";
-import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, CheckCircle, Notebook } from "lucide-react";
+import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, CheckCircle, Notebook, Play } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +35,8 @@ const iconMap: Record<string, React.ElementType> = {
   Trophy,
   Star,
   Gift,
-  Dumbbell
+  Dumbbell,
+  Play
 };
 
 
@@ -229,144 +230,87 @@ export default function LearnPage() {
     </div>
   );
 
-  const RightSidebar = () => (
-    <aside className="w-full lg:w-80 flex-shrink-0 p-6 space-y-6">
-        <Card>
-            <CardHeader>
-                <CardTitle>Get More</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className="text-muted-foreground mb-4">Unlock enhanced and unlimited learning experience!</p>
-                <Button className="w-full" variant="secondary">Go Pro</Button>
-            </CardContent>
-        </Card>
-        <Card>
-            <CardHeader>
-                <CardTitle>Leaderboard</CardTitle>
-            </CardHeader>
-            <CardContent className="text-center">
-                 <Lock className="h-12 w-12 mx-auto text-muted-foreground/50 mb-2"/>
-                <p className="text-muted-foreground text-sm">Reach 100 XP to unlock leaderboards!</p>
-            </CardContent>
-        </Card>
-        <Card>
-            <CardHeader>
-                <CardTitle>Daily Goals</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                 <div>
-                    <div className="flex justify-between text-sm mb-1">
-                        <p>Earn 100 XP</p>
-                        <p className="text-muted-foreground">10/100</p>
-                    </div>
-                    <Progress value={10}/>
-                 </div>
-                 <div>
-                    <div className="flex justify-between text-sm mb-1">
-                        <p>Complete 6 lessons</p>
-                        <p className="text-muted-foreground">0/6</p>
-                    </div>
-                    <Progress value={0}/>
-                 </div>
-                 <div>
-                    <div className="flex justify-between text-sm mb-1">
-                        <p>Solve 3 challenges</p>
-                        <p className="text-muted-foreground">0/3</p>
-                    </div>
-                    <Progress value={0}/>
-                 </div>
-            </CardContent>
-        </Card>
-    </aside>
-  );
+  const DesktopView = () => (
+    <div className="hidden md:flex flex-col h-full bg-muted/40">
+        <header className="p-6 border-b bg-background">
+            <h1 className="text-2xl font-bold">{selectedCourse.title}</h1>
+            <p className="text-muted-foreground">{selectedCourse.description}</p>
+        </header>
 
-  const DesktopView = () => {
-    return (
-      <div className="hidden md:flex flex-row h-full">
-        <main className="flex-1 overflow-y-auto p-8 min-w-0 max-w-2xl mx-auto w-full">
-            <header className="mb-8 flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">{selectedCourse.title}</h1>
-                    <p className="text-muted-foreground">{selectedCourse.description}</p>
+        <main className="flex-1 overflow-y-auto">
+            <div className="grid grid-cols-3 gap-6 p-6">
+                <div className="col-span-2 space-y-6">
+                    {selectedCourse.sections.map(section => (
+                         <Card key={section.sectionId}>
+                            <CardHeader>
+                                <CardTitle>{section.title}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-2">
+                                {section.lessons.map(lesson => {
+                                    const unlocked = isLessonUnlocked(lesson.lessonId);
+                                    const isCompleted = completedLessons.includes(lesson.lessonId);
+                                    const lessonNumber = getLessonIndex(lesson.lessonId) + 1;
+                                    
+                                    const LessonRow = (
+                                        <div
+                                            className={cn(
+                                                'flex items-center p-3 rounded-lg transition-colors',
+                                                unlocked ? 'hover:bg-muted' : 'opacity-60 cursor-not-allowed',
+                                                isCompleted && 'bg-primary/10 hover:bg-primary/20'
+                                            )}
+                                        >
+                                            <div className="flex items-center justify-center h-10 w-10 bg-primary/10 text-primary rounded-full font-bold text-lg mr-4">
+                                                {lessonNumber}
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="font-semibold">{lesson.title}</p>
+                                                <p className="text-sm text-muted-foreground">{lesson.type}</p>
+                                            </div>
+                                            <Button variant={isCompleted ? "secondary" : "default"} size="sm" disabled={!unlocked}>
+                                                {isCompleted ? <CheckCircle className="mr-2 h-4 w-4" /> : unlocked ? <Play className="mr-2 h-4 w-4" /> : <Lock className="mr-2 h-4 w-4" />}
+                                                {isCompleted ? "Completed" : "Learn"}
+                                            </Button>
+                                        </div>
+                                    );
+
+                                    if (unlocked) {
+                                        return (
+                                            <Link href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`} key={lesson.lessonId}>
+                                                {LessonRow}
+                                            </Link>
+                                        )
+                                    }
+                                    
+                                    return <div key={lesson.lessonId}>{LessonRow}</div>
+                                })}
+                            </CardContent>
+                         </Card>
+                    ))}
                 </div>
-                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="justify-between h-12 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
-                           Switch Course
-                            <ChevronDown className="h-4 w-4 ml-2"/>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-[300px]">
-                        {courses.map(course => (
-                            <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
-                                {course.title}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </header>
-            
-            <div className="relative flex flex-col items-center">
-                {selectedCourse.sections.map((section, sectionIndex) => (
-                    <React.Fragment key={section.sectionId}>
-                        <div className="flex items-center w-full my-12" key={section.title}>
-                            <div className="flex-grow border-t-2 border-dashed border-border"></div>
-                            <h2 className="mx-4 text-lg font-bold text-muted-foreground uppercase tracking-wider">{section.title}</h2>
-                            <div className="flex-grow border-t-2 border-dashed border-border"></div>
-                        </div>
-                        {section.lessons.map((lesson, lessonIndex) => {
-                          const unlocked = isLessonUnlocked(lesson.lessonId);
-                          let variant: 'primary' | 'accent' | 'muted' = 'primary';
-                          if (!unlocked) {
-                            variant = 'muted';
-                          } else if (lesson.type === 'quiz' || lesson.type === 'chest' || lesson.type === 'trophy') {
-                            variant = 'accent';
-                          }
-
-                          const wrapperClasses = getNodeClasses(getLessonIndex(lesson.lessonId));
-                          const labelClasses = `absolute -bottom-10 text-center font-bold text-sm ${unlocked ? 'text-foreground' : 'text-muted-foreground/50'}`;
-                          const buttonContent = (
-                            <div className={wrapperClasses}>
-                              <motion.div
-                                initial={{ scale: unlocked ? 1 : 0.8, opacity: unlocked ? 1 : 0.7 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                transition={{ type: 'spring', stiffness: 300, damping: 20, delay: unlocked ? 0.1 : 0 }}
-                              >
-                                <ThreeDButton 
-                                  variant={variant}
-                                  state={unlocked ? 'active' : 'inactive'}
-                                  className="w-24 h-24 rounded-full"
-                                  disabled={!unlocked}
-                                >
-                                  {getNodeIcon(lesson, unlocked)}
-                                </ThreeDButton>
-                              </motion.div>
-                              <span className={labelClasses}>{lesson.title}</span>
-                            </div>
-                          );
-
-                          if (unlocked) {
-                            return (
-                              <Link key={lesson.lessonId} href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`} className="w-full">
-                                {buttonContent}
-                              </Link>
-                            )
-                          }
-
-                          return (
-                            <div key={lesson.lessonId} className="w-full opacity-50 cursor-not-allowed">
-                              {buttonContent}
-                            </div>
-                          )
-                        })}
-                    </React.Fragment>
-                ))}
+                <aside className="space-y-6">
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Course Progress</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col items-center">
+                            <RadialProgress value={courseProgress} />
+                            <p className="text-muted-foreground mt-2">{completedCount} of {totalLessons} lessons completed</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Continue Learning</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                             <p className="text-muted-foreground">The next lesson is waiting for you.</p>
+                             <Button className="w-full mt-4">Jump Back In</Button>
+                        </CardContent>
+                    </Card>
+                </aside>
             </div>
         </main>
-        <RightSidebar />
-      </div>
-    )
-  };
+    </div>
+  );
 
   return (
     <>

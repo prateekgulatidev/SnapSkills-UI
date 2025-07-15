@@ -74,7 +74,7 @@ const SidebarItem = ({
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen">
+      <div className="hidden md:block">
         <Sidebar>
           <SidebarHeader>
               <Link href="/" className="flex items-center gap-2">
@@ -110,14 +110,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
-        <div className="flex-1 flex flex-col min-w-0">
-          <div className="flex-grow overflow-y-auto">
-            {children}
-          </div>
-          <div className="md:hidden">
+      </div>
+      <div className="w-full">
+        <div className="md:hidden">
             <BottomNav />
-          </div>
         </div>
+        {children}
       </div>
     </SidebarProvider>
   );

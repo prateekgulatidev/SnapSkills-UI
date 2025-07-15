@@ -216,9 +216,12 @@ const Sidebar = React.forwardRef<
     return (
         <div
             ref={ref}
+            data-state={state}
+            data-collapsible={collapsible}
+            data-side={side}
             className={cn(
-            'group peer hidden md:block border-r bg-muted/40 transition-all duration-300 ease-in-out',
-            open ? 'w-[220px] lg:w-[280px]' : 'w-[70px] lg:w-[80px]',
+            'group peer hidden shrink-0 md:flex md:flex-col border-r bg-muted/40 transition-all duration-300 ease-in-out',
+            open ? 'w-[280px]' : 'w-[80px]',
             className
             )}
             {...props}
@@ -334,7 +337,7 @@ const SidebarHeader = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-4 transition-all duration-300", !open && "items-center", className)}
+      className={cn("flex flex-col gap-2 p-4 transition-all duration-300", !open && "items-center px-2", className)}
       {...props}
     />
   )
