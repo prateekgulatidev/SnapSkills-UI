@@ -74,51 +74,51 @@ const SidebarItem = ({
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <SidebarInset>
-        <div className="flex flex-col h-screen md:flex-row">
-          <div className="hidden md:block">
-            <Sidebar>
-              <SidebarHeader>
-                 <Link href="/" className="flex items-center gap-2">
-                    <BookOpenCheck className="w-7 h-7 text-primary" />
-                    <span className="text-xl font-bold">SnapSkills</span>
-                </Link>
-              </SidebarHeader>
-              <SidebarContent>
-                <SidebarMenu>
-                  {navItems.map((item) => (
-                    <SidebarItem key={item.href} {...item} />
-                  ))}
+      <div className="flex min-h-screen">
+        <Sidebar>
+          <SidebarHeader>
+              <Link href="/" className="flex items-center gap-2">
+                <BookOpenCheck className="w-7 h-7 text-primary" />
+                <span className="text-xl font-bold">SnapSkills</span>
+            </Link>
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMenu>
+              {navItems.map((item) => (
+                <SidebarItem key={item.href} {...item} />
+              ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip={{children: 'Profile'}}>
+                    <Link href="/profile">
+                        <User />
+                        <span>Profile</span>
+                    </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarContent>
+          <SidebarFooter>
+              <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={{children: 'Profile'}}>
-                        <Link href="/profile">
-                            <User />
-                            <span>Profile</span>
+                    <SidebarMenuButton asChild tooltip={{children: 'Settings'}}>
+                        <Link href="#">
+                            <Settings />
+                            <span>Settings</span>
                         </Link>
                     </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarContent>
-              <SidebarFooter>
-                  <SidebarMenu>
-                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild tooltip={{children: 'Settings'}}>
-                            <Link href="#">
-                                <Settings />
-                                <span>Settings</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  </SidebarMenu>
-              </SidebarFooter>
-            </Sidebar>
+                </SidebarMenuItem>
+              </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+        <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-grow overflow-y-auto">
+            {children}
           </div>
-          <div className="flex-1 flex-grow overflow-y-auto min-w-0">{children}</div>
           <div className="md:hidden">
             <BottomNav />
           </div>
         </div>
-      </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 }

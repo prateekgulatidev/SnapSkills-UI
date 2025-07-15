@@ -132,8 +132,43 @@ export default function LearnPage() {
     return isCompleted || isPreviousCompleted;
   };
 
-  const LearningPath = ({ isMobile = false }) => (
-    <div className="max-w-2xl mx-auto w-full">
+  const MobileView = () => (
+    <div className="md:hidden flex flex-col h-full">
+       <header className="p-4 space-y-4 border-b sticky top-0 bg-background z-10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+                <div className="bg-accent/30 p-2 rounded-full">
+                <Flame className="w-6 h-6 text-orange-500" />
+                </div>
+                <div>
+                <p className="font-bold text-orange-500">5</p>
+                </div>
+            </div>
+            <div className="flex items-center gap-1 text-sm font-semibold">
+                <Zap className="w-4 h-4 text-yellow-500 fill-yellow-400" />
+                <span>120 XP</span>
+            </div>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-full justify-between h-14 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
+                    <div className="text-left">
+                        <p className="text-lg font-bold">{selectedCourse.title}</p>
+                    </div>
+                    <ChevronDown className="h-6 w-6"/>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[calc(100vw-2rem)]">
+                {courses.map(course => (
+                    <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
+                        {course.title}
+                    </DropdownMenuItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+      </header>
+
+      <main className="flex-grow overflow-y-auto p-4 max-w-2xl mx-auto w-full">
         <div className="relative flex flex-col items-center">
             {selectedCourse.sections.map((section, sectionIndex) => (
                 <React.Fragment key={section.sectionId}>
@@ -190,47 +225,6 @@ export default function LearnPage() {
                 </React.Fragment>
             ))}
         </div>
-    </div>
-  );
-
-  const MobileView = () => (
-    <div className="md:hidden flex flex-col h-full">
-       <header className="p-4 space-y-4 border-b sticky top-0 bg-background z-10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-                <div className="bg-accent/30 p-2 rounded-full">
-                <Flame className="w-6 h-6 text-orange-500" />
-                </div>
-                <div>
-                <p className="font-bold text-orange-500">5</p>
-                </div>
-            </div>
-            <div className="flex items-center gap-1 text-sm font-semibold">
-                <Zap className="w-4 h-4 text-yellow-500 fill-yellow-400" />
-                <span>120 XP</span>
-            </div>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full justify-between h-14 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
-                    <div className="text-left">
-                        <p className="text-lg font-bold">{selectedCourse.title}</p>
-                    </div>
-                    <ChevronDown className="h-6 w-6"/>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[calc(100vw-2rem)]">
-                {courses.map(course => (
-                    <DropdownMenuItem key={course.courseId} onSelect={() => handleCourseSelect(course)}>
-                        {course.title}
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-      </header>
-
-      <main className="flex-grow overflow-y-auto p-4">
-        <LearningPath isMobile={true}/>
       </main>
     </div>
   );
@@ -289,7 +283,7 @@ export default function LearnPage() {
   const DesktopView = () => {
     return (
       <div className="hidden md:flex flex-row h-full">
-        <main className="flex-1 overflow-y-auto p-8 min-w-0">
+        <main className="flex-1 overflow-y-auto p-8 min-w-0 max-w-2xl mx-auto w-full">
             <header className="mb-8 flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold">{selectedCourse.title}</h1>
@@ -312,67 +306,60 @@ export default function LearnPage() {
                 </DropdownMenu>
             </header>
             
-            <Card className="mb-8">
-                <CardContent className="p-6 flex items-center justify-between">
-                    <div>
-                        <CardTitle>Course Progress</CardTitle>
-                        <CardDescription>{completedCount} of {totalLessons} lessons completed</CardDescription>
-                    </div>
-                    <RadialProgress value={courseProgress} />
-                </CardContent>
-            </Card>
-
-            <div className="space-y-6">
-                {selectedCourse.sections.map(section => (
-                    <div key={section.sectionId}>
-                        <h2 className="text-xl font-bold mb-3">{section.title}</h2>
-                        <div className="space-y-2">
-                           {section.lessons.map((lesson, index) => {
-                               const unlocked = isLessonUnlocked(lesson.lessonId);
-                               const isCompleted = completedLessons.includes(lesson.lessonId);
-                               const LessonRow = (
-                                    <div
-                                        className={cn(
-                                            'flex items-center p-3 rounded-lg transition-colors',
-                                            unlocked ? 'hover:bg-muted' : 'opacity-60 cursor-not-allowed',
-                                            isCompleted && 'bg-primary/10 hover:bg-primary/20'
-                                        )}
-                                    >
-                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted-foreground/10 mr-4 text-muted-foreground font-bold">
-                                            {index + 1}
-                                        </div>
-                                        <div className="flex-grow">
-                                            <p className="font-medium">{lesson.title}</p>
-                                        </div>
-                                        {unlocked ? (
-                                            <Button variant={isCompleted ? "ghost" : "default"}>
-                                                {isCompleted ? <CheckCircle className="mr-2"/> : null}
-                                                {isCompleted ? "Completed" : "Learn"}
-                                            </Button>
-                                        ) : (
-                                            <Button variant="ghost" disabled>
-                                                <Lock className="mr-2" />
-                                                Locked
-                                            </Button>
-                                        )}
-                                    </div>
-                                );
-                               
-                               if (unlocked) {
-                                   return (
-                                       <Link href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`} key={lesson.lessonId}>
-                                           {LessonRow}
-                                       </Link>
-                                   )
-                               }
-                               return (
-                                   <div key={lesson.lessonId}>
-                                        {LessonRow}
-                                   </div>
-                               )
-                           })}
+            <div className="relative flex flex-col items-center">
+                {selectedCourse.sections.map((section, sectionIndex) => (
+                    <React.Fragment key={section.sectionId}>
+                        <div className="flex items-center w-full my-12" key={section.title}>
+                            <div className="flex-grow border-t-2 border-dashed border-border"></div>
+                            <h2 className="mx-4 text-lg font-bold text-muted-foreground uppercase tracking-wider">{section.title}</h2>
+                            <div className="flex-grow border-t-2 border-dashed border-border"></div>
                         </div>
-                    </div>
+                        {section.lessons.map((lesson, lessonIndex) => {
+                          const unlocked = isLessonUnlocked(lesson.lessonId);
+                          let variant: 'primary' | 'accent' | 'muted' = 'primary';
+                          if (!unlocked) {
+                            variant = 'muted';
+                          } else if (lesson.type === 'quiz' || lesson.type === 'chest' || lesson.type === 'trophy') {
+                            variant = 'accent';
+                          }
+
+                          const wrapperClasses = getNodeClasses(getLessonIndex(lesson.lessonId));
+                          const labelClasses = `absolute -bottom-10 text-center font-bold text-sm ${unlocked ? 'text-foreground' : 'text-muted-foreground/50'}`;
+                          const buttonContent = (
+                            <div className={wrapperClasses}>
+                              <motion.div
+                                initial={{ scale: unlocked ? 1 : 0.8, opacity: unlocked ? 1 : 0.7 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 20, delay: unlocked ? 0.1 : 0 }}
+                              >
+                                <ThreeDButton 
+                                  variant={variant}
+                                  state={unlocked ? 'active' : 'inactive'}
+                                  className="w-24 h-24 rounded-full"
+                                  disabled={!unlocked}
+                                >
+                                  {getNodeIcon(lesson, unlocked)}
+                                </ThreeDButton>
+                              </motion.div>
+                              <span className={labelClasses}>{lesson.title}</span>
+                            </div>
+                          );
+
+                          if (unlocked) {
+                            return (
+                              <Link key={lesson.lessonId} href={`/lesson/${lesson.lessonId}?courseId=${selectedCourse.courseId}`} className="w-full">
+                                {buttonContent}
+                              </Link>
+                            )
+                          }
+
+                          return (
+                            <div key={lesson.lessonId} className="w-full opacity-50 cursor-not-allowed">
+                              {buttonContent}
+                            </div>
+                          )
+                        })}
+                    </React.Fragment>
                 ))}
             </div>
         </main>
@@ -388,3 +375,4 @@ export default function LearnPage() {
     </>
   );
 }
+
