@@ -1,20 +1,122 @@
-import { BottomNav } from '@/components/BottomNav';
-import { TopNav } from '@/components/TopNav';
 
-export default function AppLayout({
-  children,
+'use client';
+
+import * as React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { BottomNav } from '@/components/BottomNav';
+import { cn } from '@/lib/utils';
+import {
+  BookOpen,
+  Compass,
+  Trophy,
+  FileQuestion,
+  User,
+  BookOpenCheck,
+  Flame,
+  Zap,
+  LayoutGrid,
+  Store,
+  BarChart,
+  LifeBuoy,
+  Settings,
+} from 'lucide-react';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarTrigger,
+  SidebarInset,
+  SidebarProvider,
+  SidebarFooter,
+} from '@/components/ui/sidebar';
+
+const navItems = [
+  { href: '/learn', icon: BookOpen, label: 'Learn' },
+  { href: '/explore', icon: Compass, label: 'Explore' },
+  { href: '/leaderboard', icon: Trophy, label: 'Rank' },
+  { href: '/quizzes', icon: FileQuestion, label: 'Quizzes' },
+];
+
+const SidebarItem = ({
+  href,
+  icon: Icon,
+  label,
 }: {
-  children: React.ReactNode;
-}) {
+  href: string;
+  icon: React.ElementType;
+  label: string;
+}) => {
+  const pathname = usePathname();
+  const isActive = pathname.startsWith(href);
+
   return (
-    <div className="flex flex-col h-screen">
-      <div className="hidden md:block">
-        <TopNav />
-      </div>
-      <div className="flex-grow overflow-y-auto">{children}</div>
-      <div className="md:hidden">
-        <BottomNav />
-      </div>
-    </div>
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        asChild
+        isActive={isActive}
+        tooltip={{ children: label }}
+      >
+        <Link href={href}>
+          <Icon />
+          <span>{label}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+};
+
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <SidebarInset>
+        <div className="flex flex-col h-screen md:flex-row">
+          <div className="hidden md:block">
+            <Sidebar>
+              <SidebarHeader>
+                 <Link href="/" className="flex items-center gap-2">
+                    <BookOpenCheck className="w-7 h-7 text-primary" />
+                    <span className="text-xl font-bold">SnapSkills</span>
+                </Link>
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarMenu>
+                  {navItems.map((item) => (
+                    <SidebarItem key={item.href} {...item} />
+                  ))}
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip={{children: 'Profile'}}>
+                        <Link href="/profile">
+                            <User />
+                            <span>Profile</span>
+                        </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarContent>
+              <SidebarFooter>
+                  <SidebarMenu>
+                     <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip={{children: 'Settings'}}>
+                            <Link href="#">
+                                <Settings />
+                                <span>Settings</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+              </SidebarFooter>
+            </Sidebar>
+          </div>
+          <div className="flex-grow overflow-y-auto w-full">{children}</div>
+          <div className="md:hidden">
+            <BottomNav />
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -58,25 +59,22 @@ export default function ProfilePage() {
     
     const isDark = document.documentElement.classList.contains('dark');
     
-    // Clear all theme-related classes first
     const themeClasses = ['theme-default', 'theme-growth', 'theme-focus', 'theme-momentum'];
     document.documentElement.classList.remove(...themeClasses);
     
-    // re-add dark if it was there
     if(isDark) document.documentElement.classList.add('dark');
 
-    // Add the new theme class if it's not the default
     if (newTheme !== 'theme-default') {
       document.documentElement.classList.add(newTheme);
     }
   };
   
   if (!isMounted) {
-    return null; // or a loading skeleton
+    return null; 
   }
 
   return (
-    <div className="p-4 space-y-6 pb-20">
+    <div className="max-w-2xl mx-auto p-4 md:p-8 space-y-6 pb-20">
       <header className="flex items-center gap-4">
         <Avatar className="h-20 w-20">
           <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" data-ai-hint="person portrait" />
