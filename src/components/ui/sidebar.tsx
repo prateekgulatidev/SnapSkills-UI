@@ -221,7 +221,7 @@ const Sidebar = React.forwardRef<
             data-side={side}
             className={cn(
             'group peer hidden shrink-0 md:flex md:flex-col border-r bg-muted/40 transition-all duration-300 ease-in-out',
-            open ? 'w-[280px]' : 'w-[80px]',
+            open ? 'md:w-[220px] lg:w-[280px]' : 'md:w-[80px]',
             className
             )}
             {...props}

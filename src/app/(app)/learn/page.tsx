@@ -1,10 +1,9 @@
 
-
 'use client';
 
 import * as React from 'react';
 import { Progress } from "@/components/ui/progress";
-import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, CheckCircle, Notebook, Play, Crown } from "lucide-react";
+import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, Crown } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +17,6 @@ import { ThreeDButton } from '@/components/ui/ThreeDButton';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { RadialProgress } from '@/components/ui/radial-progress';
 
 const iconMap: Record<string, React.ElementType> = {
   BookOpen,
@@ -54,7 +52,6 @@ const getNodeIcon = (lesson: Lesson, unlocked: boolean) => {
         }
     }
     
-    // Fallback icon
     return <BookOpen className={commonClasses} />;
 }
 
@@ -232,7 +229,7 @@ export default function LearnPage() {
 
   const DesktopView = () => (
     <div className="hidden md:flex h-full w-full">
-        <main className="flex-grow overflow-y-auto p-4 max-w-2xl mx-auto w-full">
+        <main className="flex-grow p-4 max-w-2xl mx-auto w-full">
             <header className="py-4">
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -309,7 +306,7 @@ export default function LearnPage() {
                 ))}
             </div>
         </main>
-        <aside className="hidden lg:block w-[350px] p-6 space-y-6 border-l shrink-0">
+        <aside className="hidden md:block w-[350px] p-6 space-y-6 border-l shrink-0">
             <div className="flex items-center justify-around">
                 <div className="flex items-center gap-2 text-orange-500 font-bold">
                     <Flame className="w-6 h-6" />
