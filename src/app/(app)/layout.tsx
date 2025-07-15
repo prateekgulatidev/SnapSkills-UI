@@ -5,7 +5,6 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BottomNav } from '@/components/BottomNav';
-import { cn } from '@/lib/utils';
 import {
   BookOpen,
   Compass,
@@ -13,12 +12,6 @@ import {
   FileQuestion,
   User,
   BookOpenCheck,
-  Flame,
-  Zap,
-  LayoutGrid,
-  Store,
-  BarChart,
-  LifeBuoy,
   Settings,
 } from 'lucide-react';
 import {
