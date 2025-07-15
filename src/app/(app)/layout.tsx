@@ -63,6 +63,7 @@ const SidebarItem = ({
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+    const { open } = useSidebar();
   return (
     <SidebarProvider>
       <div className="flex flex-col md:flex-row min-h-screen bg-muted/40 w-full">
@@ -71,7 +72,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <SidebarHeader>
                 <Link href="/" className="flex items-center gap-2">
                   <BookOpenCheck className="w-7 h-7 text-primary" />
-                  <span className="text-xl font-bold">SnapSkills</span>
+                  {open && <span className="text-xl font-bold">SnapSkills</span>}
               </Link>
             </SidebarHeader>
             <SidebarContent>
@@ -83,7 +84,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   <SidebarMenuButton asChild tooltip={{children: 'Profile'}}>
                       <Link href="/profile">
                           <User />
-                           <span className="sr-only">Profile</span>
+                          {open ? <span>Profile</span> : <span className="sr-only">Profile</span>}
                       </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -95,7 +96,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                       <SidebarMenuButton asChild tooltip={{children: 'Settings'}}>
                           <Link href="#">
                               <Settings />
-                              <span className="sr-only">Settings</span>
+                              {open ? <span>Settings</span> : <span className="sr-only">Settings</span>}
                           </Link>
                       </SidebarMenuButton>
                   </SidebarMenuItem>
