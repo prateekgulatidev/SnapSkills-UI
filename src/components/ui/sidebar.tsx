@@ -533,24 +533,22 @@ const SidebarMenuButton = React.forwardRef<
     const Comp = asChild ? Slot : "button"
     const { isMobile, state, open } = useSidebar()
 
-    const button = (
-        <Comp
-            ref={ref}
-            data-sidebar="menu-button"
-            data-size={size}
-            data-active={isActive}
-            className={cn(sidebarMenuButtonVariants({ variant, size }), !open && "justify-center", className)}
-            {...props}
-        >
-            <div className="flex w-full items-center gap-3">
-              {children}
-            </div>
-            {open ? null : <span className="sr-only">{(tooltip as any)?.children || ''}</span>}
-        </Comp>
+    const buttonContent = (
+      <Comp
+        ref={ref}
+        data-sidebar="menu-button"
+        data-size={size}
+        data-active={isActive}
+        className={cn(sidebarMenuButtonVariants({ variant, size }), !open && "justify-center", className)}
+        {...props}
+      >
+        {children}
+        {!open && <span className="sr-only">{(tooltip as any)?.children || ''}</span>}
+      </Comp>
     );
 
     if (!tooltip || open) {
-      return button
+      return buttonContent
     }
     
     if (typeof tooltip === "string") {
@@ -561,7 +559,7 @@ const SidebarMenuButton = React.forwardRef<
 
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"
