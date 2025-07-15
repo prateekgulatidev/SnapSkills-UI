@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { Progress } from "@/components/ui/progress";
-import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, Crown } from "lucide-react";
+import { Flame, Zap, Star, Lock, BookOpen, Gift, Dumbbell, Code, Braces, Terminal, Binary, FunctionSquare, Variable, Repeat, GitCommit, GitBranch, Puzzle, Trophy, ChevronDown, Crown, Play, MessageSquare, Type, ToggleRight, Combine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +34,11 @@ const iconMap: Record<string, React.ElementType> = {
   Star,
   Gift,
   Dumbbell,
-  Play
+  Play,
+  MessageSquare,
+  Type,
+  ToggleRight,
+  Combine,
 };
 
 
@@ -229,7 +233,7 @@ export default function LearnPage() {
 
   const DesktopView = () => (
     <div className="hidden md:flex h-full w-full">
-        <main className="flex-grow p-4 max-w-2xl mx-auto w-full">
+        <main className="flex-grow p-4 min-w-0 flex-1">
             <header className="py-4">
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
