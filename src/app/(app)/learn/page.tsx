@@ -343,7 +343,7 @@ export default function LearnPage() {
                          <Crown className="w-6 h-6 text-yellow-300" />
                         <CardTitle className="text-2xl">Go Premium!</CardTitle>
                     </div>
-                </Header>
+                </CardHeader>
                 <CardContent>
                     <p className="mb-4">Unlock exclusive content, remove ads, and master skills faster.</p>
                     <Button variant="secondary" className="w-full text-blue-600 font-bold">Try for Free</Button>
