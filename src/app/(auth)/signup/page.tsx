@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -45,16 +46,17 @@ export default function SignupPage() {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create an account.');
-      }
+      const data = await response.json();
 
-      toast({
-        title: "Success!",
-        description: "Your account has been created. Please log in.",
-      });
-      router.push('/login');
+      if (data.success) {
+        toast({
+            title: "Success!",
+            description: data.message || "Your account has been created. Please log in.",
+        });
+        router.push('/login');
+      } else {
+        throw new Error(data.message || 'Failed to create an account.');
+      }
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
