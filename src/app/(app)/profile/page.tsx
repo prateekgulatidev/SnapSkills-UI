@@ -103,6 +103,7 @@ export default function ProfilePage() {
         toast({ variant: "destructive", title: "Logout Error", description: errorMessage });
     } finally {
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         router.push('/');
     }
   };

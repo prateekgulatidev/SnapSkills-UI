@@ -45,6 +45,9 @@ export default function LoginPage() {
 
       if (data.accessToken) {
         localStorage.setItem('accessToken', data.accessToken);
+        if (data.refreshToken) {
+            localStorage.setItem('refreshToken', data.refreshToken);
+        }
         router.push('/learn');
       } else {
         throw new Error(data.message || 'Login failed. Please check your credentials.');
