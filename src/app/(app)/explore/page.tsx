@@ -38,33 +38,33 @@ const CourseCard = ({ course, isLast }: { course: PathCourse; isLast: boolean })
 };
 
 export default function ExplorePage() {
-    const path = learningPaths[0]; // Assuming we're showing the first path for now
-
     return (
         <div className="flex flex-col h-full">
             <header className="p-6 border-b">
                 <h1 className="text-2xl font-bold">Learning Paths</h1>
                 <p className="text-muted-foreground">Step-by-step paths to mastery</p>
             </header>
-            <main className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
-                <section>
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="w-16 h-16 text-primary">
-                            <PathIcon />
+            <main className="flex-1 overflow-y-auto p-6 md:p-8 space-y-12">
+                {learningPaths.map((path) => (
+                    <section key={path.id}>
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="w-16 h-16 text-primary">
+                                <PathIcon />
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-bold">{path.title}</h2>
+                                <p className="text-muted-foreground">{path.description}</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2 className="text-xl font-bold">{path.title}</h2>
-                            <p className="text-muted-foreground">{path.description}</p>
+                        <div className="p-6 bg-muted/40 rounded-2xl">
+                            <div className="flex items-center gap-10 overflow-x-auto pb-4 -mb-4">
+                                {path.courses.map((course, index) => (
+                                    <CourseCard key={course.id} course={course} isLast={index === path.courses.length - 1} />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                    <div className="p-6 bg-muted/40 rounded-2xl">
-                         <div className="flex items-center gap-10 overflow-x-auto pb-4 -mb-4">
-                            {path.courses.map((course, index) => (
-                                <CourseCard key={course.id} course={course} isLast={index === path.courses.length - 1} />
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                ))}
             </main>
         </div>
     );
