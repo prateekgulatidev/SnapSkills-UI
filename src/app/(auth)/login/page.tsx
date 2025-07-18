@@ -44,11 +44,9 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (data.accessToken) {
-        // Successful login, handle token storage if needed
-        // For now, redirect to the learn page
+        localStorage.setItem('accessToken', data.accessToken);
         router.push('/learn');
       } else {
-        // Handle error response
         throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 

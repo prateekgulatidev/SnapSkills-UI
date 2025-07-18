@@ -2,7 +2,7 @@
 'use client';
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   Bell,
@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const adminNavItems = [
     { href: '/admin/dashboard', icon: Home, label: 'Dashboard' },
@@ -74,6 +75,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
+    const { toast } = useToast();
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     
     if (pathname === '/admin') {
@@ -85,6 +88,41 @@ export default function AdminLayout({
     const handleLinkClick = () => {
         setIsSheetOpen(false);
     }
+
+    const handleLogout = async () => {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+        const token = localStorage.getItem('accessToken');
+
+        if (!token) {
+            toast({ title: 'Not Authenticated', description: 'No access token found.' });
+            router.push('/');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${apiBaseUrl}/api/auth/signout`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            if (response.ok) {
+                toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Logout failed.');
+            }
+
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
+            toast({ variant: "destructive", title: "Logout Error", description: errorMessage });
+        } finally {
+            localStorage.removeItem('accessToken');
+            router.push('/');
+        }
+    };
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -155,11 +193,9 @@ export default function AdminLayout({
           <div className="w-full flex-1 text-center md:text-left">
             <h1 className="text-lg font-semibold md:text-2xl">{pageTitle}</h1>
           </div>
-          <Button variant="outline" asChild>
-            <Link href="/">
+          <Button variant="outline" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-2" />
               Logout
-            </Link>
           </Button>
         </header>
         {children}

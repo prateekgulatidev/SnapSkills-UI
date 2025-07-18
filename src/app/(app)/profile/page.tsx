@@ -8,10 +8,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Flame, CheckCircle, Edit, LogOut, Moon, Sun, Palette } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import { useToast } from "@/hooks/use-toast";
 
 const completedCourses = [
   { id: 1, title: 'HTML & CSS Basics' },
@@ -22,6 +23,8 @@ export default function ProfilePage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [theme, setTheme] = useState('theme-default');
   const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsMounted(true);
@@ -69,6 +72,41 @@ export default function ProfilePage() {
     }
   };
   
+  const handleLogout = async () => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+    const token = localStorage.getItem('accessToken');
+
+    if (!token) {
+        toast({ title: 'Not Authenticated', description: 'No access token found.' });
+        router.push('/');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${apiBaseUrl}/api/auth/signout`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        
+        if (response.ok) {
+            toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Logout failed.');
+        }
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
+        toast({ variant: "destructive", title: "Logout Error", description: errorMessage });
+    } finally {
+        localStorage.removeItem('accessToken');
+        router.push('/');
+    }
+  };
+
   if (!isMounted) {
     return null; 
   }
@@ -150,11 +188,9 @@ export default function ProfilePage() {
             </div>
           </CardContent>
         </Card>
-        <Button variant="destructive" className="w-full justify-start gap-2" asChild>
-          <Link href="/">
+        <Button variant="destructive" className="w-full justify-start gap-2" onClick={handleLogout}>
             <LogOut className="w-4 h-4" />
             <span>Logout</span>
-          </Link>
         </Button>
       </div>
     </div>
