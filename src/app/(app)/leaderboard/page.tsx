@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Flame, Trophy, Zap, Diamond, Shield, Lock, Medal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { UserStats } from '@/components/UserStats';
 
 function LeaderboardRow({ user }: { user: LeaderboardUser }) {
   let rankIcon;
@@ -101,23 +102,7 @@ export default function LeaderboardPage() {
             </div>
         </main>
         <aside className="hidden md:block w-[350px] p-6 space-y-6 border-l shrink-0">
-             <div className="flex items-center justify-around p-2 rounded-lg bg-muted/50">
-                 <div className="flex flex-col items-center gap-1 text-orange-500 font-bold">
-                    <Flame className="w-6 h-6" />
-                    <span>5</span>
-                    <span className="text-xs font-medium text-muted-foreground">Streak</span>
-                </div>
-                <div className="flex flex-col items-center gap-1 text-yellow-500 font-bold">
-                    <Zap className="w-6 h-6 fill-yellow-400" />
-                    <span>{userXP.toLocaleString()}</span>
-                    <span className="text-xs font-medium text-muted-foreground">XP</span>
-                </div>
-                 <div className="flex flex-col items-center gap-1 text-blue-500 font-bold">
-                    <Diamond className="w-6 h-6 fill-blue-400" />
-                    <span>12</span>
-                    <span className="text-xs font-medium text-muted-foreground">Gems</span>
-                </div>
-            </div>
+             <UserStats charge={100} streak={5} xp={userXP} />
             <Card>
                 <CardHeader>
                     <Trophy className="w-8 h-8 text-yellow-500 mb-2"/>

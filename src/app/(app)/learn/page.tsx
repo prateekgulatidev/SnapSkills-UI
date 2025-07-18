@@ -17,6 +17,7 @@ import { ThreeDButton } from '@/components/ui/ThreeDButton';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { UserStats } from '@/components/UserStats';
 
 const iconMap: Record<string, React.ElementType> = {
   BookOpen,
@@ -329,23 +330,7 @@ export default function LearnPage() {
             </div>
         </main>
         <aside className="hidden md:block w-[350px] p-6 space-y-6 border-l shrink-0">
-             <div className="flex items-center justify-around">
-                <div className="flex flex-col items-center gap-1 text-green-500 font-bold">
-                    <Battery className="w-6 h-6" />
-                    <span>100%</span>
-                    <span className="text-xs font-medium text-muted-foreground">Charge</span>
-                </div>
-                 <div className="flex flex-col items-center gap-1 text-orange-500 font-bold">
-                    <Flame className="w-6 h-6" />
-                    <span>5</span>
-                    <span className="text-xs font-medium text-muted-foreground">Streak</span>
-                </div>
-                <div className="flex flex-col items-center gap-1 text-yellow-500 font-bold">
-                    <Zap className="w-6 h-6 fill-yellow-400" />
-                    <span>120</span>
-                    <span className="text-xs font-medium text-muted-foreground">XP</span>
-                </div>
-            </div>
+             <UserStats charge={100} streak={5} xp={120} />
             <Card className="bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg">
                 <CardHeader>
                     <div className="flex items-center gap-2">
