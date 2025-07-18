@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -40,14 +41,16 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Login failed. Please check your credentials.');
+      const data = await response.json();
+
+      if (data.accessToken) {
+        // Successful login, handle token storage if needed
+        // For now, redirect to the learn page
+        router.push('/learn');
+      } else {
+        // Handle error response
+        throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
-      
-      // Assuming the API returns a token or session info you might want to store
-      // For now, we just redirect on success.
-      router.push('/learn');
 
     } catch (error) {
        const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
