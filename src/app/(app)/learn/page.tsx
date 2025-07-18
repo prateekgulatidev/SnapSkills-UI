@@ -39,7 +39,8 @@ const iconMap: Record<string, React.ElementType> = {
   Type,
   ToggleRight,
   Combine,
-  Battery
+  Battery,
+  Zap,
 };
 
 
@@ -252,8 +253,11 @@ export default function LearnPage() {
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="w-full justify-between h-14 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
-                            <div className="text-left">
-                                <p className="text-lg font-bold">{selectedCourse.title}</p>
+                             <div className="flex items-center gap-3">
+                                {getCourseIcon(selectedCourse)}
+                                <div className="text-left">
+                                    <p className="text-lg font-bold">{selectedCourse.title}</p>
+                                </div>
                             </div>
                             <ChevronDown className="h-6 w-6"/>
                         </Button>
@@ -326,6 +330,11 @@ export default function LearnPage() {
         </main>
         <aside className="hidden md:block w-[350px] p-6 space-y-6 border-l shrink-0">
              <div className="flex items-center justify-around">
+                <div className="flex flex-col items-center gap-1 text-green-500 font-bold">
+                    <Battery className="w-6 h-6" />
+                    <span>100%</span>
+                    <span className="text-xs font-medium text-muted-foreground">Charge</span>
+                </div>
                  <div className="flex flex-col items-center gap-1 text-orange-500 font-bold">
                     <Flame className="w-6 h-6" />
                     <span>5</span>
